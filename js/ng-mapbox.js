@@ -2,11 +2,12 @@ angular.module('ng-mapbox-example', [])
   .controller('MapboxController', function($scope, $q) {
     $scope.markers = [];
 
-    this.addMarker = function(lat, lng) {
+    this.addMarker = function(lat, lng, opts, popupContent) {
       // TODO: convert this to promises
       // timeout is hack around map not being available until mapboxMap link function
       setTimeout(function() {
-        var marker = L.marker([lat, lng]).addTo($scope.map);
+        var marker = L.marker([lat, lng], opts).addTo($scope.map);
+        if(popupContent.length > 0)marker.bindPopup(popupContent);
         $scope.markers.push(marker);
       }, 0);
     };
@@ -33,14 +34,21 @@ angular.module('ng-mapbox-example', [])
       template: '<div id="ng-mapbox-map" ng-transclude></div>'
     }
   })
-  .directive('mapboxMarker', function() {
+  .directive('mapboxMarker', function($compile) {
     return {
       restrict: 'E',
-      replace: true,
       require: '^mapboxMap',
       transclude: true,
-      link: function($scope, $element, $attrs, mapController) {
-        mapController.addMarker($attrs.lat, $attrs.lng);
+      link: function($scope, $element, $attrs, mapController, transclude) {
+        // TODO: there's got to be a better way to programmatically access transcluded content
+        var popupHTML = '';
+        var transcluded = transclude();
+        for(var i = 0; i < transcluded.length; i++) {
+          if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
+        }
+        var opts = { draggable: typeof $attrs.draggable != 'undefined' };
+        // TODO: compile popupHTML
+        mapController.addMarker($attrs.lat, $attrs.lng, opts, popupHTML);
       }
     }
   })

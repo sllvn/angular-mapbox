@@ -1,0 +1,243 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sonic Boom Records",
+        "address": "2209 NW Market St Seattle, WA 98107"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.385041,
+          47.66867
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Easy Street Records",
+        "address": "4559 California Ave SW Seattle, WA 98116"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.38679,
+          47.561768
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Holy Cow",
+        "address": "1501 Pike Pl Ste 325 Seattle, WA 98101"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.341049,
+          47.608707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jive Time Records",
+        "address": "3506 Fremont Ave N Seattle, WA 98103"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.34989,
+          47.65066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Everyday Music",
+        "address": "1520 10th Ave Seattle, WA 98122"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.319069,
+          47.614746
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Silver Platters - Sodo",
+        "address": "2930 1st Ave S Seattle, WA 98134"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.333694,
+          47.576767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bop Street Records",
+        "address": "2220 NW Market St Seattle, WA 98107"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.385796,
+          47.66909
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Porchlight",
+        "address": "1318 E Pike St Seattle, WA 98122"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.315001,
+          47.614147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wall of Sound",
+        "address": "1205 E Pike St #1C Seattle, WA 98122"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.316429,
+          47.613922
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Platinum Records",
+        "address": "915 E Pike St Seattle, WA 98122"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.319977,
+          47.613842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Spin Cycle Records Seattle",
+        "address": "321 Broadway E Seattle, WA 98102"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.321304,
+          47.621666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Radar Hair & Records",
+        "address": "2724 1st Ave S Seattle, WA 98134"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.333694,
+          47.57893
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Neptune Music Company",
+        "address": "4344 Brooklyn Ave NE Seattle, WA 98105"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.314283,
+          47.66093
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Georgetown Records",
+        "address": "1201 S Vale St Seattle, WA 98108"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.316925,
+          47.548855
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rubato Records",
+        "address": "1501 Pike Pl, 325 Seattle, WA 98101-1580"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.341049,
+          47.608707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Silver Platters - Bellevue",
+        "address": "15600 NE 8th St Bellevue, WA 98008"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.132217,
+          47.616998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vortex Music & Movies",
+        "address": "12525 Totem Lake Blvd Kirkland, WA 98034"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.182869,
+          47.712261
+        ]
+      }
+    }
+  ]
+}

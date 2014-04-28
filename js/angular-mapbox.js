@@ -5,7 +5,6 @@ angularMapbox.controller('MapboxController', function($scope, $q) {
   $scope.featureLayers = [];
 
   this.addMarker = function(lat, lng, opts, popupContent) {
-    // TODO: convert this to promises
     // timeout is hack around map not being available until mapboxMap link function
     setTimeout(function() {
       var marker = L.marker([lat, lng], opts).addTo($scope.map);
@@ -30,7 +29,7 @@ angularMapbox.controller('MapboxController', function($scope, $q) {
   };
 });
 
-angularMapbox.directive('mapboxMap', function() {
+angularMapbox.directive('mapboxMap', function($compile) {
   return {
     restrict: 'E',
     transclude: true,
@@ -41,16 +40,23 @@ angularMapbox.directive('mapboxMap', function() {
       zoomLevel: '@',
     },
     controller: 'MapboxController',
-    link: function($scope, $element, $attrs) {
-      $scope.map = L.mapbox.map('ng-mapbox-map', $scope.mapboxKey);
+    link: function(scope, element, attrs) {
+      scope.map = L.mapbox.map('ng-mapbox-map', scope.mapboxKey);
 
-      var zoomLevel = $scope.zoomLevel || 12;
-      if($scope.centerLat && $scope.centerLng) {
-        $scope.map.setView([$scope.centerLat, $scope.centerLng], zoomLevel);
+      var zoomLevel = scope.zoomLevel || 12;
+      if(scope.centerLat && scope.centerLng) {
+        scope.map.setView([scope.centerLat, scope.centerLng], zoomLevel);
       }
+
+      scope.map.on('popupopen', function(e) {
+        // ensure that popups are compiled
+        var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
+        $compile(popup)(scope);
+        if(!scope.$$phase) scope.$digest();
+      });
     },
     template: '<div id="ng-mapbox-map" ng-transclude></div>'
-  }
+  };
 });
 
 angularMapbox.directive('mapboxMarker', function($compile) {
@@ -58,19 +64,22 @@ angularMapbox.directive('mapboxMarker', function($compile) {
     restrict: 'E',
     require: '^mapboxMap',
     transclude: true,
+    scope: {
+
+    },
     link: function(scope, element, attrs, controller, transclude) {
-      // TODO: there's got to be a better way to programmatically access transcluded content
+      // there's got to be a better way to programmatically access transcluded content
       var popupHTML = '';
       var transcluded = transclude();
       for(var i = 0; i < transcluded.length; i++) {
         if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
       }
       var opts = { draggable: typeof attrs.draggable != 'undefined' };
-      // TODO: compile popupHTML
-      debugger;
       controller.addMarker(attrs.lat, attrs.lng, opts, popupHTML);
+    },
+    controller: function($scope, $compile) {
     }
-  }
+  };
 });
 
 angularMapbox.directive('featureLayer', function() {
@@ -84,5 +93,5 @@ angularMapbox.directive('featureLayer', function() {
         controller.addFeatureLayerFromUrl(attrs.url);
       }
     }
-  }
+  };
 });

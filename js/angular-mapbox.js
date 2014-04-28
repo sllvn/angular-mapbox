@@ -14,10 +14,9 @@ angularMapbox.controller('MapboxController', function($scope, $q) {
     }, 0);
   };
 
-  this.addFeatureLayer = function(geojson) {
-    // TODO: finish this
+  this.addFeatureLayer = function(geojsonObject) {
     setTimeout(function() {
-      var featureLayer = L.mapbox.featureLayer(geojson).addTo($scope.map);
+      var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo($scope.map);
       $scope.featureLayers.push(featureLayer);
     }, 0);
   };
@@ -68,6 +67,7 @@ angularMapbox.directive('mapboxMarker', function($compile) {
       }
       var opts = { draggable: typeof attrs.draggable != 'undefined' };
       // TODO: compile popupHTML
+      debugger;
       controller.addMarker(attrs.lat, attrs.lng, opts, popupHTML);
     }
   }

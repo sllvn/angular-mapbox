@@ -1,6 +1,6 @@
 var angularMapbox = angular.module('angular-mapbox', []);
 
-angularMapbox.controller('MapboxController', function($scope, $q) {
+angularMapbox.controller('MapboxController', function($scope) {
   $scope.markers = [];
   $scope.featureLayers = [];
 

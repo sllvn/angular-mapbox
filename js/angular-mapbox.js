@@ -4,21 +4,31 @@ angularMapbox.controller('MapboxController', function($scope) {
   $scope.markers = [];
   $scope.featureLayers = [];
 
-  $scope.addMarker = function(lat, lng, popupContent, opts) {
+  $scope.addMarker = function(latlng, popupContent, opts, style) {
     // timeout is hack around map not being available until mapboxMap link function
     setTimeout(function() {
-      var marker = L.marker([lat, lng], opts).addTo($scope.map);
+      opts = opts || {}
+
+      var marker = L.mapbox.marker.style({ properties: style }, latlng);
       if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
+      marker.addTo($scope.map);
+
+      // this needs to come after being added to map because
+      // unfortunately, the L.mapbox.marker.style() factory
+      // does not let us pass other opts (eg, draggable) in
+      if(opts.draggable) marker.dragging.enable();
+
       $scope.markers.push(marker);
     }, 0);
   };
 
-  $scope.addCurrentLocation = function(popupContent, opts) {
+  $scope.addCurrentLocation = function(popupContent, opts, style) {
     setTimeout(function() {
       $scope.map.locate();
+      style = style || { 'marker-color': '#000', 'marker-symbol': 'star-stroked' };
 
       $scope.map.on('locationfound', function(e) {
-        $scope.addMarker(e.latlng.lat, e.latlng.lng);
+        $scope.addMarker([e.latlng.lat, e.latlng.lng], null, opts, style);
       });
     }, 0);
   }
@@ -84,8 +94,9 @@ angularMapbox.directive('mapboxMarker', function($compile) {
         if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
       }
       var opts = { draggable: typeof attrs.draggable != 'undefined' };
+      var style = {};
 
-      controller.$scope.addMarker(attrs.lat, attrs.lng, popupHTML, opts);
+      controller.$scope.addMarker([attrs.lat, attrs.lng], popupHTML, opts, style);
     }
   };
 });

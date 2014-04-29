@@ -8,14 +8,14 @@
 </head>
 <body ng-app="angular-mapbox-example">
   <div ng-controller="geojsonController">
-    <mapbox-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
-      <feature-layer data="{{ geojsonData }}"></feature-layer>
-      <feature-layer url="record-stores.geojson"></feature-layer>
-    </mapbox-map>
+    <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
+      <mb-feature-layer data="{{ geojsonData }}"></mb-feature-layer>
+      <mb-feature-layer url="record-stores.geojson"></mb-feature-layer>
+    </mb-map>
   </div>
 
-  <script src="/lib/angular-1.2.js"></script>
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
+  <script src="/lib/angular-1.2.js"></script>
   <script src="/js/angular-mapbox.js"></script>
   <script src="/js/app.js"></script>
 </body>

@@ -7,18 +7,18 @@
   <link href="/css/app.css" rel="stylesheet" />
 </head>
 <body ng-app="angular-mapbox-example">
-  <mapbox-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
-    <mapbox-marker lat="47.603569" lng="-122.329453" draggable>
+  <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
+    <mb-marker lat="47.603569" lng="-122.329453" draggable>
       <h3>here is a title</h3>
       <p>and some more popup content</p>
       <p>{{"compilation check"}}</p>
-    </mapbox-marker>
-    <mapbox-marker lat="47.623569" lng="-122.349453"></mapbox-marker>
-    <current-location></current-location>
-  </mapbox-map>
+    </mb-marker>
+    <mb-marker lat="47.623569" lng="-122.349453"></mb-marker>
+    <mb-current-location></current-location>
+  </mb-map>
 
-  <script src="/lib/angular-1.2.js"></script>
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
+  <script src="/lib/angular-1.2.js"></script>
   <script src="/js/angular-mapbox.js"></script>
   <script src="/js/app.js"></script>
 </body>

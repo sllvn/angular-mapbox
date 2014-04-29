@@ -51,7 +51,7 @@ angularMapbox.controller('MapboxController', function($scope) {
   this.$scope = $scope;
 });
 
-angularMapbox.directive('mapboxMap', function($compile) {
+angularMapbox.directive('mbMap', function($compile) {
   return {
     restrict: 'E',
     transclude: true,
@@ -81,10 +81,10 @@ angularMapbox.directive('mapboxMap', function($compile) {
   };
 });
 
-angularMapbox.directive('mapboxMarker', function($compile) {
+angularMapbox.directive('mbMarker', function($compile) {
   return {
     restrict: 'E',
-    require: '^mapboxMap',
+    require: '^mbMap',
     transclude: true,
     link: function(scope, element, attrs, controller, transclude) {
       // there's got to be a better way to programmatically access transcluded content
@@ -101,10 +101,10 @@ angularMapbox.directive('mapboxMarker', function($compile) {
   };
 });
 
-angularMapbox.directive('featureLayer', function() {
+angularMapbox.directive('mbFeatureLayer', function() {
   return {
     restrict: 'E',
-    require: '^mapboxMap',
+    require: '^mbMap',
     link: function(scope, element, attrs, controller) {
       if(attrs.data) {
         controller.$scope.addFeatureLayer(scope.$eval(attrs.data));
@@ -115,10 +115,10 @@ angularMapbox.directive('featureLayer', function() {
   };
 });
 
-angularMapbox.directive('currentLocation', function() {
+angularMapbox.directive('mbCurrentLocation', function() {
   return {
     restrict: 'E',
-    require: '^mapboxMap',
+    require: '^mbMap',
     link: function(scope, element, attrs, controller) {
       controller.$scope.addCurrentLocation();
     }

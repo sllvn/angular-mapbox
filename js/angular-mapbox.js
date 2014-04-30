@@ -5,7 +5,8 @@ angularMapbox.controller('MapboxController', function($scope) {
   $scope.featureLayers = [];
 
   $scope.addMarker = function(latlng, popupContent, opts, style) {
-    // timeout is hack around map not being available until mapboxMap link function
+    // setTimeout is hack around map not being available until mapboxMap link function
+    // all setTimeout hacks in this are to be replaced with promise resolving on mapready
     setTimeout(function() {
       opts = opts || {}
 
@@ -55,27 +56,15 @@ angularMapbox.directive('mbMap', function($compile) {
   return {
     restrict: 'E',
     transclude: true,
-    scope: {
-      mapboxKey: '@',
-      centerLat: '@',
-      centerLng: '@',
-      zoomLevel: '@',
-    },
+    scope: true,
     controller: 'MapboxController',
     link: function(scope, element, attrs) {
-      scope.map = L.mapbox.map('ng-mapbox-map', scope.mapboxKey);
+      scope.map = L.mapbox.map('ng-mapbox-map', attrs.mapboxKey);
 
-      var zoomLevel = scope.zoomLevel || 12;
-      if(scope.centerLat && scope.centerLng) {
-        scope.map.setView([scope.centerLat, scope.centerLng], zoomLevel);
+      var zoomLevel = attrs.zoomLevel || 12;
+      if(attrs.centerLat && attrs.centerLng) {
+        scope.map.setView([attrs.centerLat, attrs.centerLng], zoomLevel);
       }
-
-      scope.map.on('popupopen', function(e) {
-        // ensure that popups are compiled
-        var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
-        $compile(popup)(scope);
-        if(!scope.$$phase) scope.$digest();
-      });
     },
     template: '<div id="ng-mapbox-map" ng-transclude></div>'
   };
@@ -86,17 +75,38 @@ angularMapbox.directive('mbMarker', function($compile) {
     restrict: 'E',
     require: '^mbMap',
     transclude: true,
+    scope: true,
     link: function(scope, element, attrs, controller, transclude) {
+      var opts = { draggable: typeof attrs.draggable != 'undefined' };
+      var style = {};
+
       // there's got to be a better way to programmatically access transcluded content
       var popupHTML = '';
       var transcluded = transclude();
       for(var i = 0; i < transcluded.length; i++) {
         if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
       }
-      var opts = { draggable: typeof attrs.draggable != 'undefined' };
-      var style = {};
 
-      controller.$scope.addMarker([attrs.lat, attrs.lng], popupHTML, opts, style);
+      setTimeout(function() {
+        controller.$scope.map.on('popupopen', function(e) {
+          // ensure that popups are compiled
+          var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
+          $compile(popup)(scope);
+          if(!scope.$$phase) scope.$digest();
+        });
+      }, 0);
+
+      setTimeout(function() {
+        var popup = angular.element(popupHTML);
+        $compile(popup)(scope);
+        if(!scope.$$phase) scope.$digest();
+        window.popup = popup;
+        var newPopupHTML = '';
+        for(var i = 0; i < popup.length; i++) {
+          newPopupHTML += popup[i].outerHTML;
+        }
+        controller.$scope.addMarker([attrs.lat, attrs.lng], newPopupHTML, opts, style);
+      }, 0);
     }
   };
 });

@@ -1,6 +1,25 @@
 var angularMapboxExample = angular.module('angular-mapbox-example', ['angular-mapbox']);
 
-angularMapboxExample.controller('geojsonController', function($scope) {
+angularMapboxExample.controller('demoController', function($scope) {
+  $scope.farmersMarkets = [
+    {
+      "name": "Capitol Hill Farmer's Market",
+      "times": "Sundays, 11am-3pm, year round",
+      "coords": {
+        "lat": 47.615244,
+        "lng": -122.320800
+      }
+    },
+    {
+      "name": "Ballard Farmer's Market",
+      "times": "Sundays, 10am-3pm, year round",
+      "coords": {
+        "lat": 47.667660,
+        "lng": -122.384800
+      }
+    },
+  ];
+
   $scope.geojsonData = {
     "type": "FeatureCollection",
     "features": [

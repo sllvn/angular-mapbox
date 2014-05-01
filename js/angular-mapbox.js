@@ -26,7 +26,6 @@ angularMapbox.controller('MapboxController', function($scope) {
   $scope.addCurrentLocation = function(popupContent, opts, style) {
     setTimeout(function() {
       $scope.map.locate();
-      style = style || { 'marker-color': '#000', 'marker-symbol': 'star-stroked' };
 
       $scope.map.on('locationfound', function(e) {
         $scope.addMarker([e.latlng.lat, e.latlng.lng], null, opts, style);
@@ -78,7 +77,7 @@ angularMapbox.directive('mbMarker', function($compile) {
     scope: true,
     link: function(scope, element, attrs, controller, transclude) {
       var opts = { draggable: typeof attrs.draggable != 'undefined' };
-      var style = {};
+      var style = setStyleOptions(attrs);
 
       // there's got to be a better way to programmatically access transcluded content
       var popupHTML = '';
@@ -94,9 +93,7 @@ angularMapbox.directive('mbMarker', function($compile) {
           $compile(popup)(scope);
           if(!scope.$$phase) scope.$digest();
         });
-      }, 0);
 
-      setTimeout(function() {
         var popup = angular.element(popupHTML);
         $compile(popup)(scope);
         if(!scope.$$phase) scope.$digest();
@@ -110,6 +107,20 @@ angularMapbox.directive('mbMarker', function($compile) {
     }
   };
 });
+
+function setStyleOptions(attrs, default_opts) {
+  var opts = default_opts || {};
+  if(attrs.size) {
+    opts['marker-size'] = attrs.size;
+  }
+  if(attrs.color) {
+    opts['marker-color'] = attrs.color;
+  }
+  if(attrs.symbol) {
+    opts['marker-symbol'] = attrs.symbol;
+  }
+  return opts;
+}
 
 angularMapbox.directive('mbFeatureLayer', function() {
   return {
@@ -130,7 +141,8 @@ angularMapbox.directive('mbCurrentLocation', function() {
     restrict: 'E',
     require: '^mbMap',
     link: function(scope, element, attrs, controller) {
-      controller.$scope.addCurrentLocation();
+      var style = setStyleOptions(attrs, { 'marker-color': '#000', 'marker-symbol': 'star-stroked' });
+      controller.$scope.addCurrentLocation(null, null, style);
     }
   };
 });

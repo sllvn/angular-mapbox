@@ -9,20 +9,20 @@
 <body ng-app="angular-mapbox-example">
   <div ng-controller="demoController">
     <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
-      <div ng-repeat="market in farmersMarkets">
+      <!--<div ng-repeat="market in farmersMarkets">
         <mb-marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}">
           <h1>{{market.name}}</h1>
           <p>{{market.times}}</p>
         </mb-marker>
-      </div>
+      </div>-->
 
-      <mb-marker lat="47.603569" lng="-122.329453" draggable>
+      <mb-marker lat="47.603569" lng="-122.329453" size="large" color="#87cbcb" symbol="tennis" draggable>
         <h3>here is a marker</h3>
         <p>and some more popup content</p>
         <p>{{"compilation check"}}</p>
       </mb-marker>
 
-      <mb-current-location></current-location>
+      <mb-current-location color="#ff0000" size="large"></current-location>
     </mb-map>
   </div>
 

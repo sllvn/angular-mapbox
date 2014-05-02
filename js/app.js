@@ -18,6 +18,22 @@ angularMapboxExample.controller('demoController', function($scope) {
         "lng": -122.384800
       }
     },
+    {
+      "name": "University District Farmer's Market",
+      "times": "Saturdays, 9am-2pm, year round",
+      "coords": {
+        "lat": 47.665731,
+        "lng": -122.312593
+      }
+    },
+    {
+      "name": "Magnolia Farmer's Market",
+      "times": "Saturdays, June to October, 10am-2pm",
+      "coords": {
+        "lat": 47.639570,
+        "lng": -122.399660
+      }
+    },
   ];
 
   $scope.geojsonData = {

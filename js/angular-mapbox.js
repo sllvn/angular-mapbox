@@ -1,62 +1,10 @@
 var angularMapbox = angular.module('angular-mapbox', []);
 
-angularMapbox.controller('MapboxController', function($scope) {
-  $scope.markers = [];
-  $scope.featureLayers = [];
-
-  $scope.addMarker = function(latlng, popupContent, opts, style) {
-    // setTimeout is hack around map not being available until mapboxMap link function
-    // all setTimeout hacks in this are to be replaced with promise resolving on mapready
-    setTimeout(function() {
-      opts = opts || {}
-
-      var marker = L.mapbox.marker.style({ properties: style }, latlng);
-      if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
-      marker.addTo($scope.map);
-
-      // this needs to come after being added to map because
-      // unfortunately, the L.mapbox.marker.style() factory
-      // does not let us pass other opts (eg, draggable) in
-      if(opts.draggable) marker.dragging.enable();
-
-      $scope.markers.push(marker);
-    }, 0);
-  };
-
-  $scope.addCurrentLocation = function(popupContent, opts, style) {
-    setTimeout(function() {
-      $scope.map.locate();
-
-      $scope.map.on('locationfound', function(e) {
-        $scope.addMarker([e.latlng.lat, e.latlng.lng], null, opts, style);
-      });
-    }, 0);
-  }
-
-  $scope.addFeatureLayer = function(geojsonObject) {
-    setTimeout(function() {
-      var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo($scope.map);
-      $scope.featureLayers.push(featureLayer);
-    }, 0);
-  };
-
-  $scope.addFeatureLayerFromUrl = function(url) {
-    setTimeout(function() {
-      var featureLayer = L.mapbox.featureLayer().addTo($scope.map);
-      featureLayer.loadURL(url);
-      $scope.featureLayers.push(featureLayer);
-    }, 0);
-  };
-
-  this.$scope = $scope;
-});
-
 angularMapbox.directive('mbMap', function($compile) {
   return {
     restrict: 'E',
     transclude: true,
     scope: true,
-    controller: 'MapboxController',
     link: function(scope, element, attrs) {
       scope.map = L.mapbox.map('ng-mapbox-map', attrs.mapboxKey);
 
@@ -65,7 +13,72 @@ angularMapbox.directive('mbMap', function($compile) {
         scope.map.setView([attrs.centerLat, attrs.centerLng], zoomLevel);
       }
     },
-    template: '<div id="ng-mapbox-map" ng-transclude></div>'
+    template: '<div id="ng-mapbox-map" ng-transclude></div>',
+    controller: function($scope) {
+      $scope.markers = [];
+      $scope.featureLayers = [];
+
+      $scope.addMarker = function(latlng, popupContent, opts, style) {
+        // setTimeout is hack around map not being available until mapboxMap link function
+        // all setTimeout hacks in this are to be replaced with promise resolving on mapready
+        setTimeout(function() {
+          opts = opts || {}
+
+          var marker = L.mapbox.marker.style({ properties: style }, latlng);
+          if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
+          marker.addTo($scope.map);
+
+          // this needs to come after being added to map because
+          // unfortunately, the L.mapbox.marker.style() factory
+          // does not let us pass other opts (eg, draggable) in
+          if(opts.draggable) marker.dragging.enable();
+
+          $scope.markers.push(marker);
+        }, 0);
+      };
+
+      $scope.addCurrentLocation = function(popupContent, opts, style) {
+        setTimeout(function() {
+          $scope.map.locate();
+
+          $scope.map.on('locationfound', function(e) {
+            $scope.addMarker([e.latlng.lat, e.latlng.lng], null, opts, style);
+          });
+        }, 0);
+      }
+
+      $scope.addFeatureLayer = function(geojsonObject) {
+        setTimeout(function() {
+          var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo($scope.map);
+          $scope.featureLayers.push(featureLayer);
+        }, 0);
+      };
+
+      $scope.addFeatureLayerFromUrl = function(url) {
+        setTimeout(function() {
+          var featureLayer = L.mapbox.featureLayer().addTo($scope.map);
+          featureLayer.loadURL(url);
+          $scope.featureLayers.push(featureLayer);
+        }, 0);
+      };
+
+      $scope.removeMarker = function(latlng) {
+        setTimeout(function() {
+          // TODO: this should be more robust, addMarker should return a reference to that marker so it can be removed
+          // rather than removing markers at that latlng, because this will break if marker has been dragged and will remove
+          // all markers at that latlng
+          for(var i = 0; i < $scope.markers.length; i++) {
+            if($scope.markers[i].getLatLng().equals(L.latLng(latlng))) {
+              $scope.map.removeLayer($scope.markers[i]);
+              $scope.markers.splice(i, 1);
+              i--;
+            }
+          }
+        });
+      };
+
+      this.$scope = $scope;
+    }
   };
 });
 
@@ -81,7 +94,7 @@ angularMapbox.directive('mbMarker', function($compile) {
 
       // there's got to be a better way to programmatically access transcluded content
       var popupHTML = '';
-      var transcluded = transclude();
+      var transcluded = transclude(scope, function() {});
       for(var i = 0; i < transcluded.length; i++) {
         if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
       }
@@ -97,12 +110,15 @@ angularMapbox.directive('mbMarker', function($compile) {
         var popup = angular.element(popupHTML);
         $compile(popup)(scope);
         if(!scope.$$phase) scope.$digest();
-        window.popup = popup;
         var newPopupHTML = '';
         for(var i = 0; i < popup.length; i++) {
           newPopupHTML += popup[i].outerHTML;
         }
         controller.$scope.addMarker([attrs.lat, attrs.lng], newPopupHTML, opts, style);
+
+        element.bind('$destroy', function() {
+          controller.$scope.removeMarker([attrs.lat, attrs.lng]);
+        });
       }, 0);
     }
   };

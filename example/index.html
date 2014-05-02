@@ -8,22 +8,24 @@
 </head>
 <body ng-app="angular-mapbox-example">
   <div ng-controller="demoController">
-    <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
-      <!--<div ng-repeat="market in farmersMarkets">
-        <mb-marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}">
+    <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.643569" center-lng="-122.329453" zoom="12">
+      <div ng-repeat="market in farmersMarkets | filter: filterTerm">
+        <mb-marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery">
           <h1>{{market.name}}</h1>
           <p>{{market.times}}</p>
         </mb-marker>
-      </div>-->
+      </div>
 
-      <mb-marker lat="47.603569" lng="-122.329453" size="large" color="#87cbcb" symbol="tennis" draggable>
-        <h3>here is a marker</h3>
-        <p>and some more popup content</p>
-        <p>{{"compilation check"}}</p>
-      </mb-marker>
-
-      <mb-current-location color="#ff0000" size="large"></current-location>
+      <mb-current-location></mb-current-location>
     </mb-map>
+
+    <input type="text" ng-model="filterTerm" placeholder="search markets">
+    <ul ng-repeat="market in farmersMarkets | filter: filterTerm">
+      <li>
+        <h3>{{market.name}}</h3>
+        <p>{{market.times}}</p>
+      </li>
+    </div>
   </div>
 
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>

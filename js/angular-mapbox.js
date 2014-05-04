@@ -1,6 +1,6 @@
 var angularMapbox = angular.module('angular-mapbox', []);
 
-angularMapbox.directive('mbMap', function($compile, $q) {
+angularMapbox.directive('mapbox', function($compile, $q) {
   var _mapboxMap;
 
   return {
@@ -8,15 +8,15 @@ angularMapbox.directive('mbMap', function($compile, $q) {
     transclude: true,
     scope: true,
     link: function(scope, element, attrs) {
-      scope.map = L.mapbox.map('ng-mapbox-map', attrs.mapboxKey);
+      scope.map = L.mapbox.map('angular-mapbox-map', attrs.mapId);
       _mapboxMap.resolve(scope.map);
 
       var zoomLevel = attrs.zoomLevel || 12;
-      if(attrs.centerLat && attrs.centerLng) {
-        scope.map.setView([attrs.centerLat, attrs.centerLng], zoomLevel);
+      if(attrs.lat && attrs.lng) {
+        scope.map.setView([attrs.lat, attrs.lng], zoomLevel);
       }
     },
-    template: '<div id="ng-mapbox-map" ng-transclude></div>',
+    template: '<div id="angular-mapbox-map" ng-transclude></div>',
     controller: function($scope) {
       $scope.markers = [];
       $scope.featureLayers = [];
@@ -88,10 +88,10 @@ angularMapbox.directive('mbMap', function($compile, $q) {
   };
 });
 
-angularMapbox.directive('mbMarker', function($compile) {
+angularMapbox.directive('marker', function($compile) {
   return {
     restrict: 'E',
-    require: '^mbMap',
+    require: '^mapbox',
     transclude: true,
     scope: true,
     link: function(scope, element, attrs, controller, transclude) {
@@ -144,10 +144,10 @@ function setStyleOptions(attrs, default_opts) {
   return opts;
 }
 
-angularMapbox.directive('mbFeatureLayer', function() {
+angularMapbox.directive('featureLayer', function() {
   return {
     restrict: 'E',
-    require: '^mbMap',
+    require: '^mapbox',
     link: function(scope, element, attrs, controller) {
       if(attrs.data) {
         controller.$scope.addFeatureLayer(scope.$eval(attrs.data));
@@ -158,10 +158,10 @@ angularMapbox.directive('mbFeatureLayer', function() {
   };
 });
 
-angularMapbox.directive('mbCurrentLocation', function() {
+angularMapbox.directive('currentLocation', function() {
   return {
     restrict: 'E',
-    require: '^mbMap',
+    require: '^mapbox',
     link: function(scope, element, attrs, controller) {
       var style = setStyleOptions(attrs, { 'marker-color': '#000', 'marker-symbol': 'star-stroked' });
       controller.$scope.addCurrentLocation(null, null, style);

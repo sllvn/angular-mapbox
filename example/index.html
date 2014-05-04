@@ -8,16 +8,16 @@
 </head>
 <body ng-app="angular-mapbox-example">
   <div ng-controller="demoController">
-    <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.643569" center-lng="-122.329453" zoom="12">
+    <mapbox map-id="licyeus.i2pd1g7j" lat="47.643569" lng="-122.329453" zoom="12">
       <div ng-repeat="market in farmersMarkets | filter: filterTerm">
-        <mb-marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery">
+        <marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery">
           <h1>{{market.name}}</h1>
           <p>{{market.times}}</p>
-        </mb-marker>
+        </marker>
       </div>
 
-      <mb-current-location></mb-current-location>
-    </mb-map>
+      <current-location></current-location>
+    </mapbox>
 
     <input type="text" ng-model="filterTerm" placeholder="search markets">
     <ul ng-repeat="market in farmersMarkets | filter: filterTerm">

@@ -8,10 +8,10 @@
 </head>
 <body ng-app="angular-mapbox-example">
   <div ng-controller="demoController">
-    <mb-map mapbox-key="licyeus.i2pd1g7j" center-lat="47.603569" center-lng="-122.329453" zoom="13">
-      <mb-feature-layer data="{{ geojsonData }}"></mb-feature-layer>
-      <mb-feature-layer url="record-stores.geojson"></mb-feature-layer>
-    </mb-map>
+    <mapbox map-id="licyeus.i2pd1g7j" lat="47.603569" lng="-122.329453" zoom="13">
+      <feature-layer data="{{ geojsonData }}"></feature-layer>
+      <feature-layer url="record-stores.geojson"></feature-layer>
+    </mapbox>
   </div>
 
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>

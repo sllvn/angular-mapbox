@@ -7,8 +7,9 @@ angularMapbox.directive('mapbox', function($compile, $q) {
     restrict: 'E',
     transclude: true,
     scope: true,
+    replace: true,
     link: function(scope, element, attrs) {
-      scope.map = L.mapbox.map('angular-mapbox-map', attrs.mapId);
+      scope.map = L.mapbox.map(element[0], attrs.mapId);
       _mapboxMap.resolve(scope.map);
 
       var zoomLevel = attrs.zoomLevel || 12;
@@ -16,7 +17,7 @@ angularMapbox.directive('mapbox', function($compile, $q) {
         scope.map.setView([attrs.lat, attrs.lng], zoomLevel);
       }
     },
-    template: '<div id="angular-mapbox-map" ng-transclude></div>',
+    template: '<div class="angular-mapbox-map" ng-transclude></div>',
     controller: function($scope) {
       $scope.markers = [];
       $scope.featureLayers = [];

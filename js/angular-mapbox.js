@@ -39,7 +39,7 @@ angularMapbox.directive('marker', function($compile) {
     transclude: true,
     scope: true,
     link: function(scope, element, attrs, controller, transclude) {
-      var opts = { draggable: typeof attrs.draggable != 'undefined' };
+      var opts = { draggable: attrs.draggable != undefined };
       var style = setStyleOptions(attrs);
 
       function setStyleOptions(attrs, default_opts) {
@@ -109,7 +109,7 @@ angularMapbox.directive('marker', function($compile) {
             if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
           }
 
-          if(typeof attrs.currentLocation != 'undefined') {
+          if(attrs.currentLocation != undefined) {
             addCurrentLocation(map, null, opts, style);
           } else {
             var popup = angular.element(popupHTML);

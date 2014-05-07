@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Mapbox Directive</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css">
+  <link rel="stylesheet" href="css/prettify.css">
+  <script src="js/vendor/prettify.js"></script>
+  <style>
+    .container {
+    }
+    .angular-mapbox-map {
+      width: 100%;
+      height: 300px;
+    }
+    pre.prettyprint {
+      border: 0;
+    }
+  </style>
+</head>
+<body ng-app="angular-mapbox-example">
+  <div class="container">
+    <h1>Angular Mapbox Directive</h1>
+    <hr>
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Getting Started</h2>
+        <p>The angular-mapbox directive allows you to easily embed <a href="http://www.mapbox.com">Mapbox</a> maps, along with markers, features, etc., within your Angular applications. Existing methods require moderate levels of Javascript knowledge and knowledge of the <a href="http://leafletjs.org">Leaflet</a> API, while this set of directives intends to be an easy markup-only solution catering to 80% of use cases.</p>
+        <p>First, <a href="http://www.mapbox.com">sign up for a Mapbox account</a>, create a project, and get your Mapbox Map ID (it will look something like <code>username.abcd1234</code>).</p>
+        <p>Then get rolling with some basic HTML boilerplate and add the Mapbox, Angular, and angular-mapbox directive libraries:</p>
+        <pre class="prettyprint" data-type="html"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;&lt;/title&gt;
+  &lt;link rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css"&gt;
+&lt;/head&gt;
+&lt;body ng-app="angular-mapbox-demo"&gt;
+  
+  &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"&gt;&lt;/script&gt;
+  &lt;script src="//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"&gt;&lt;/script&gt;
+  &lt;script src="angular-mapbox.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    var angularMapboxDemo = angular.module('angular-mapbox-demo', ['angular-mapbox']);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Map</h2>
+        <p>Creating a map is easy, just add:</p>
+        <pre class="prettyprint" data-type="html"><code>&lt;mapbox map-id="YOUR-MAP-ID" lat="47.603569" lng="-122.329453"&gt;&lt;/mapbox&gt;</code></pre>
+        <p>The <code>lat</code>, <code>lng</code>, and <code>zoom</code> attributes are optional. Zoom will default to 12 if lat/lng are provided.</p>
+      </div>
+      <div class="col-md-5">
+        <mapbox map-id="licyeus.i2pd1g7j" lat="47.603569" lng="-122.329453"></mapbox>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Markers</h2>
+        <p>Adding markers is as simple as nesting <code>&lt;marker&gt;</code> tags inside the <code>&lt;mapbox&gt;</code>. And adding popup content is easy: just add HTML inside the <code>&lt;marker&gt;</code> element.</p>
+        <p>Markers default to gray but can be styled with Mapbox's <a href="https://www.mapbox.com/developers/simplestyle/">simplestyle-spec</a>. Add a <code>size</code> attribute with possible values <code>small</code>, <code>medium</code>, <code>large</code>. Add a <code>color</code> attribute and pass in a six-digit hex value such as <code>#39cccc</code>. And pass in a <code>symbol</code> attribute with a name matching any of Mapbox's <a href="https://www.mapbox.com/maki/">Maki icons</a> to add icons to your markers.</p>
+        <p>You can add a <code>current-location</code> attribute to place a marker at the user's current location. Current location style defaults to black with a solid star icon.</p>
+        <pre class="prettyprint" data-type="html"><code>&lt;mapbox map-id="YOUR-MAP-ID" lat="47.603569" lng="-122.329453" zoom="11"&gt;
+  &lt;marker lat="47.639570" lng="-122.399660"&gt;&lt;h1&gt;This is an unstyled marker&lt;/h1&gt;&lt;/marker&gt;
+
+  &lt;marker lat="47.615244" lng="-122.320800" size="large" color="#39cccc" symbol="grocery"&gt;
+    &lt;h1&gt;Capitol Hill Farmer's Market&lt;/h1&gt;
+    &lt;p&gt;Time: Sundays, 11am-3pm, year round&lt;/p&gt;
+  &lt;/marker&gt;
+
+  &lt;marker current-location&gt;&lt;/marker&gt;
+&lt;/mapbox></code></pre>
+      </div>
+      <div class="col-md-5">
+        <mapbox map-id="licyeus.i2pd1g7j" lat="47.603569" lng="-122.329453" zoom="11">
+          <marker lat="47.639570" lng="-122.399660"><h1>This is an unstyled marker</h1></marker>
+
+          <marker lat="47.615244" lng="-122.320800" size="large" color="#39cccc" symbol="grocery">
+            <h1>Capitol Hill Farmer's Market</h1>
+            <p>Time: Sundays, 11am-3pm, year round</p>
+          </marker>
+
+          <marker current-location></marker>
+        </mapbox>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Feature Layers</h2>
+        <p>You can import GeoJSON to your map! To be documented...</p>
+      </div>
+      <div class="col-md-5">
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Nerdy Angular Stuff</h2>
+        <p>The angular-mapbox directive inherits scope from its parent Angular controller, so that updates to the controller's <code>$scope</code> are reflected on the map. Content inside the <code>&lt;mapbox&gt;</code> directive is also compiled. This means you can use directives like <code>ng-repeat</code> (with filters!) on collections from your controller's <code>$scope</code> to update what is shown on your map.</p>
+        <pre class="prettyprint" data-type="html" ng-non-bindable><code>&lt;mapbox map-id="YOUR-MAP-ID" lat="47.603569" lng="-122.329453" zoom="10"&gt;
+  &lt;div ng-repeat="market in farmersMarkets | filter: filterTerm"&gt;
+    &lt;marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery"&gt;
+      &lt;h1&gt;{{market.name}}&lt;/h1&gt;
+      &lt;p&gt;{{market.times}}&lt;/p&gt;
+    &lt;/marker&gt;
+  &lt;/div&gt;
+&lt;/mapbox&gt;
+&lt;input type="text" class="form-control" placeholder="Search farmer's markets" ng-model="filterTerm"&gt;
+&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item" ng-repeat="market in farmersMarkets | filter: filterTerm"&gt;{{market.name}}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      </div>
+      <div class="col-md-5" ng-controller="demoController">
+        <mapbox map-id="licyeus.i2pd1g7j" lat="47.603569" lng="-122.329453" zoom="10">
+          <div ng-repeat="market in farmersMarkets | filter: filterTerm">
+            <marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery">
+              <h1>{{market.name}}</h1>
+              <p>{{market.times}}</p>
+            </marker>
+          </div>
+        </mapbox>
+        <input type="text" class="form-control" placeholder="Search farmer's markets" ng-model="filterTerm">
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="market in farmersMarkets | filter: filterTerm">{{market.name}}</li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h2>Roadmap</h2>
+        <p>In no particular order:</p>
+        <ul>
+          <li>Tests!</li>
+          <li>Create a formal build process with Gulp and package for use with bower</li>
+          <li>Misc. bugfixes (popup content for current-location, more robust removal of markers)</li>
+          <li>Reduce boilerplate (package Angular and Mapbox with library, bootstrap app automatically)</li>
+          <li>Broadcast and listen for events to communicate with rest of application</li>
+          <li>Support for marker clustering</li>
+          <li>Support for scaling map to fit all markers</li>
+          <li>Leaflet directive: this Mapbox directive should extend a Leaflet directive and ideally be called with something like <code>&lt;leaflet mapbox map-id=""&gt;</code></li>
+        </ul>
+      </div>
+      <div class="col-md-5">
+      </div>
+    </div>
+    <hr>
+  </div>
+  
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+  <script src="//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
+  <script src="js/angular-mapbox.js"></script>
+  <script src="example/app.js"></script>
+  <script>prettyPrint();</script>
+</body>
+</html>

@@ -12,9 +12,9 @@ angularMapbox.directive('mapbox', function($compile, $q) {
       scope.map = L.mapbox.map(element[0], attrs.mapId);
       _mapboxMap.resolve(scope.map);
 
-      var zoomLevel = attrs.zoomLevel || 12;
+      var zoom = attrs.zoom || 12;
       if(attrs.lat && attrs.lng) {
-        scope.map.setView([attrs.lat, attrs.lng], zoomLevel);
+        scope.map.setView([attrs.lat, attrs.lng], zoom);
       }
     },
     template: '<div class="angular-mapbox-map" ng-transclude></div>',

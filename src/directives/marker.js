@@ -7,6 +7,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
     link: function(scope, element, attrs, controller, transclude) {
       var opts = { draggable: attrs.draggable != undefined };
       var style = setStyleOptions(attrs);
+      var marker;
 
       function setStyleOptions(attrs, default_opts) {
         var opts = default_opts || {};
@@ -34,26 +35,15 @@ angular.module('angularMapbox').directive('marker', function($compile) {
         if(opts.draggable) marker.dragging.enable();
 
         controller.$scope.markers.push(marker);
-      };
 
-      var removeMarker = function(map, latlng) {
-        // TODO: this should be more robust, addMarker should return a reference to that marker so it can be removed
-        // rather than removing markers at that latlng, because this will break if marker has been dragged and will remove
-        // all markers at that latlng
-        for(var i = 0; i < controller.$scope.markers.length; i++) {
-          if(controller.$scope.markers[i].getLatLng().equals(L.latLng(latlng))) {
-            map.removeLayer(controller.$scope.markers[i]);
-            controller.$scope.markers.splice(i, 1);
-            i--;
-          }
-        }
+        return marker;
       };
 
       var addCurrentLocation = function(map, popupContent, opts, style) {
         var style = setStyleOptions(attrs, { 'marker-color': '#000', 'marker-symbol': 'star' });
 
         map.on('locationfound', function(e) {
-          addMarker(map, [e.latlng.lat, e.latlng.lng], null, opts, style);
+          marker = addMarker(map, [e.latlng.lat, e.latlng.lng], null, opts, style);
         });
 
         map.locate();
@@ -87,10 +77,10 @@ angular.module('angularMapbox').directive('marker', function($compile) {
               newPopupHTML += popup[i].outerHTML;
             }
 
-            addMarker(map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
+            marker = addMarker(map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
 
             element.bind('$destroy', function() {
-              removeMarker(map, [attrs.lat, attrs.lng]);
+              map.removeLayer(marker);
             });
           }
         }, 0);

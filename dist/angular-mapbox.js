@@ -1,6 +1,27 @@
-var angularMapbox = angular.module('angular-mapbox', []);
+angular.module('angularMapbox', []).directive('featureLayer', function() {
+  return {
+    restrict: 'E',
+    require: '^mapbox',
+    link: function(scope, element, attrs, controller) {
+      if(attrs.data) {
+        controller.getMap().then(function(map) {
+          var geojsonObject = scope.$eval(attrs.data);
+          var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
+          controller.$scope.featureLayers.push(featureLayer);
+        });
+      } else if(attrs.url) {
+        controller.getMap().then(function(map) {
+          var featureLayer = L.mapbox.featureLayer().addTo(map);
+          featureLayer.loadURL(attrs.url);
+          controller.$scope.featureLayers.push(featureLayer);
+        });
+      }
+    }
+  };
+});
 
-angularMapbox.directive('mapbox', function($compile, $q) {
+
+angular.module('angularMapbox', []).directive('mapbox', function($compile, $q) {
   var _mapboxMap;
 
   return {
@@ -32,7 +53,8 @@ angularMapbox.directive('mapbox', function($compile, $q) {
   };
 });
 
-angularMapbox.directive('marker', function($compile) {
+
+angular.module('angularMapbox').directive('marker', function($compile) {
   return {
     restrict: 'E',
     require: '^mapbox',
@@ -129,28 +151,6 @@ angularMapbox.directive('marker', function($compile) {
           }
         }, 0);
       });
-    }
-  };
-});
-
-angularMapbox.directive('featureLayer', function() {
-  return {
-    restrict: 'E',
-    require: '^mapbox',
-    link: function(scope, element, attrs, controller) {
-      if(attrs.data) {
-        controller.getMap().then(function(map) {
-          var geojsonObject = scope.$eval(attrs.data);
-          var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
-          controller.$scope.featureLayers.push(featureLayer);
-        });
-      } else if(attrs.url) {
-        controller.getMap().then(function(map) {
-          var featureLayer = L.mapbox.featureLayer().addTo(map);
-          featureLayer.loadURL(attrs.url);
-          controller.$scope.featureLayers.push(featureLayer);
-        });
-      }
     }
   };
 });

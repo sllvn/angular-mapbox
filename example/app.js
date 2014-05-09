@@ -1,4 +1,4 @@
-var angularMapboxExample = angular.module('angular-mapbox-example', ['angular-mapbox']);
+var angularMapboxExample = angular.module('angular-mapbox-example', ['angularMapbox']);
 
 angularMapboxExample.controller('demoController', function($scope) {
   $scope.farmersMarkets = [

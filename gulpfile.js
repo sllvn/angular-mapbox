@@ -5,14 +5,13 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload');
 
 gulp.task('scripts', function() {
-  return gulp.src('src/**/*.js')
+  return gulp.src(['src/angular-mapbox.js', 'src/**/*.js'])
     .pipe(concat('angular-mapbox.js'))
-    .pipe(ngmin({dynamic: true}))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build', function() {
-  return gulp.src('src/**/*.js')
+  return gulp.src(['src/angular-mapbox.js', 'src/**/*.js'])
     .pipe(concat('angular-mapbox.min.js'))
     .pipe(ngmin())
     .pipe(uglify({ mangle: false }))
@@ -26,3 +25,4 @@ gulp.task('watch', ['scripts'], function() {
     server.changed(file.path);
   });
 });
+

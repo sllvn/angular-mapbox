@@ -1,4 +1,4 @@
-angular.module('angularMapbox', []).directive('mapbox', function($compile, $q) {
+angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
   var _mapboxMap;
 
   return {

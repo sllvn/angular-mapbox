@@ -1,7 +1,8 @@
-var gulp = require('gulp'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
-    ngmin = require('gulp-ngmin'),
+var gulp       = require('gulp'),
+    concat     = require('gulp-concat'),
+    uglify     = require('gulp-uglify'),
+    ngmin      = require('gulp-ngmin'),
+    jshint     = require('gulp-jshint'),
     livereload = require('gulp-livereload');
 
 gulp.task('scripts', function() {
@@ -16,6 +17,12 @@ gulp.task('build', function() {
     .pipe(ngmin())
     .pipe(uglify({ mangle: false }))
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('lint', function() {
+  return gulp.src('src/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('watch', ['scripts'], function() {

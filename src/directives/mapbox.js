@@ -15,11 +15,12 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
       element.css('width', mapWidth + 'px');
       element.css('height', mapHeight + 'px');
 
-
       var zoom = attrs.zoom || 12;
       if(attrs.lat && attrs.lng) {
         scope.map.setView([attrs.lat, attrs.lng], zoom);
       }
+
+      scope.isClusteringMarkers = attrs.clusterMarkers !== undefined;
 
       var shouldRefitMap = attrs.scaleToFit !== undefined;
       scope.fitMapToMarkers = function() {
@@ -28,7 +29,7 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
 
         var group = new L.featureGroup(scope.markers);
         scope.map.fitBounds(group.getBounds());
-      }
+      };
     },
     template: '<div class="angular-mapbox-map" ng-transclude></div>',
     controller: function($scope) {
@@ -39,6 +40,11 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
       $scope.getMap = this.getMap = function() {
         return _mapboxMap.promise;
       };
+
+      $scope.clusterGroup = new L.MarkerClusterGroup();
+      this.getMap().then(function(map) {
+        map.addLayer($scope.clusterGroup);
+      });
 
       this.$scope = $scope;
     }

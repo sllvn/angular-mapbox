@@ -28,7 +28,12 @@ angular.module('angularMapbox').directive('marker', function($compile) {
 
         var marker = L.mapbox.marker.style({ properties: style }, latlng);
         if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
-        marker.addTo(map);
+
+        if(controller.$scope.isClusteringMarkers && opts.excludeFromClustering !== true) {
+          controller.$scope.clusterGroup.addLayer(marker);
+        } else {
+          marker.addTo(map);
+        }
 
         // this needs to come after being added to map because the L.mapbox.marker.style() factory
         // does not let us pass other opts (eg, draggable) in
@@ -42,6 +47,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
 
       var addCurrentLocation = function(map, popupContent, opts, style) {
         style = setStyleOptions(style, { 'marker-color': '#000', 'marker-symbol': 'star' });
+        opts.excludeFromClustering = true;
 
         map.on('locationfound', function(e) {
           marker = addMarker(map, [e.latlng.lat, e.latlng.lng], null, opts, style);
@@ -81,7 +87,11 @@ angular.module('angularMapbox').directive('marker', function($compile) {
             marker = addMarker(map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
 
             element.bind('$destroy', function() {
-              map.removeLayer(marker);
+              if(controller.$scope.isClusteringMarkers) {
+                controller.$scope.clusterGroup.removeLayer(marker);
+              } else {
+                map.removeLayer(marker);
+              }
             });
           }
         }, 0);

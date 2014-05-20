@@ -35,6 +35,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
         if(opts.draggable) marker.dragging.enable();
 
         controller.$scope.markers.push(marker);
+        controller.$scope.fitMapToMarkers();
 
         return marker;
       };

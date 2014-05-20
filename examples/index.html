@@ -7,7 +7,7 @@
 </head>
 <body ng-app="angular-mapbox-example">
   <div ng-controller="demoController">
-    <mapbox map-id="licyeus.i2pd1g7j" lat="47.643569" lng="-122.329453" zoom="12">
+    <mapbox map-id="licyeus.i2pd1g7j" lat="47.643569" lng="-122.329453" zoom="12" scale-to-fit>
       <div ng-repeat="market in farmersMarkets | filter: filterTerm">
         <marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="#39cccc" symbol="grocery">
           <h1>{{market.name}}</h1>

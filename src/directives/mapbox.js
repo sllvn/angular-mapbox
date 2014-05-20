@@ -10,6 +10,12 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
       scope.map = L.mapbox.map(element[0], attrs.mapId);
       _mapboxMap.resolve(scope.map);
 
+      var mapWidth = attrs.width || 500;
+      var mapHeight = attrs.height || 500;
+
+      element.css('width', mapWidth + 'px');
+      element.css('height', mapHeight + 'px');
+
       var zoom = attrs.zoom || 12;
       if(attrs.lat && attrs.lng) {
         scope.map.setView([attrs.lat, attrs.lng], zoom);

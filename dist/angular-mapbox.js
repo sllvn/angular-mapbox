@@ -65,7 +65,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
     transclude: true,
     scope: true,
     link: function(scope, element, attrs, controller, transclude) {
-      var opts = { draggable: attrs.draggable != undefined };
+      var opts = { draggable: attrs.draggable !== undefined };
       var style = setStyleOptions(attrs);
       var marker;
 
@@ -84,7 +84,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
       }
 
       var addMarker = function(map, latlng, popupContent, opts, style) {
-        opts = opts || {}
+        opts = opts || {};
 
         var marker = L.mapbox.marker.style({ properties: style }, latlng);
         if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
@@ -100,14 +100,14 @@ angular.module('angularMapbox').directive('marker', function($compile) {
       };
 
       var addCurrentLocation = function(map, popupContent, opts, style) {
-        var style = setStyleOptions(attrs, { 'marker-color': '#000', 'marker-symbol': 'star' });
+        style = setStyleOptions(style, { 'marker-color': '#000', 'marker-symbol': 'star' });
 
         map.on('locationfound', function(e) {
           marker = addMarker(map, [e.latlng.lat, e.latlng.lng], null, opts, style);
         });
 
         map.locate();
-      }
+      };
 
       controller.getMap().then(function(map) {
         map.on('popupopen', function(e) {
@@ -122,10 +122,10 @@ angular.module('angularMapbox').directive('marker', function($compile) {
           var popupHTML = '';
           var transcluded = transclude(scope, function() {});
           for(var i = 0; i < transcluded.length; i++) {
-            if(transcluded[i].outerHTML != undefined) popupHTML += transcluded[i].outerHTML;
+            if(transcluded[i].outerHTML !== undefined) popupHTML += transcluded[i].outerHTML;
           }
 
-          if(attrs.currentLocation != undefined) {
+          if(attrs.currentLocation !== undefined) {
             addCurrentLocation(map, null, opts, style);
           } else {
             var popup = angular.element(popupHTML);
@@ -133,7 +133,7 @@ angular.module('angularMapbox').directive('marker', function($compile) {
             if(!scope.$$phase) scope.$digest();
 
             var newPopupHTML = '';
-            for(var i = 0; i < popup.length; i++) {
+            for(i = 0; i < popup.length; i++) {
               newPopupHTML += popup[i].outerHTML;
             }
 

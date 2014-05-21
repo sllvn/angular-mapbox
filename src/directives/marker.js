@@ -43,8 +43,8 @@ angular.module('angularMapbox').directive('marker', function($compile) {
           console.log('color: ');
           console.log(opts['marker-color']);
         }
-        if(attrs.symbol) {
-          opts['marker-symbol'] = attrs.symbol;
+        if(attrs.icon) {
+          opts['marker-symbol'] = attrs.icon;
         }
         return opts;
       }

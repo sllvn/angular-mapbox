@@ -41,10 +41,12 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
         return _mapboxMap.promise;
       };
 
-      $scope.clusterGroup = new L.MarkerClusterGroup();
-      this.getMap().then(function(map) {
-        map.addLayer($scope.clusterGroup);
-      });
+      if(L.MarkerClusterGroup) {
+        $scope.clusterGroup = new L.MarkerClusterGroup();
+        this.getMap().then(function(map) {
+          map.addLayer($scope.clusterGroup);
+        });
+      }
 
       this.$scope = $scope;
     }

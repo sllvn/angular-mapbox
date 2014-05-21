@@ -6,7 +6,6 @@ angular.module('angularMapbox').directive('featureLayer', function() {
     restrict: 'E',
     require: '^mapbox',
     link: function(scope, element, attrs, controller) {
-      console.log('link');
       if(attrs.data) {
         controller.getMap().then(function(map) {
           var geojsonObject = scope.$eval(attrs.data);
@@ -68,10 +67,12 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
         return _mapboxMap.promise;
       };
 
-      $scope.clusterGroup = new L.MarkerClusterGroup();
-      this.getMap().then(function(map) {
-        map.addLayer($scope.clusterGroup);
-      });
+      if(L.MarkerClusterGroup) {
+        $scope.clusterGroup = new L.MarkerClusterGroup();
+        this.getMap().then(function(map) {
+          map.addLayer($scope.clusterGroup);
+        });
+      }
 
       this.$scope = $scope;
     }
@@ -121,8 +122,6 @@ angular.module('angularMapbox').directive('marker', function($compile) {
           } else {
             opts['marker-color'] = _colors[attrs.color] || attrs.color;
           }
-          console.log('color: ');
-          console.log(opts['marker-color']);
         }
         if(attrs.icon) {
           opts['marker-symbol'] = attrs.icon;
@@ -182,16 +181,20 @@ angular.module('angularMapbox').directive('marker', function($compile) {
           if(attrs.currentLocation !== undefined) {
             addCurrentLocation(map, null, opts, style);
           } else {
-            var popup = angular.element(popupHTML);
-            $compile(popup)(scope);
-            if(!scope.$$phase) scope.$digest();
+            if(popupHTML) {
+              var popup = angular.element(popupHTML);
+              $compile(popup)(scope);
+              if(!scope.$$phase) scope.$digest();
 
-            var newPopupHTML = '';
-            for(i = 0; i < popup.length; i++) {
-              newPopupHTML += popup[i].outerHTML;
+              var newPopupHTML = '';
+              for(i = 0; i < popup.length; i++) {
+                newPopupHTML += popup[i].outerHTML;
+              }
+
+              marker = addMarker(map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
+            } else {
+              marker = addMarker(map, [attrs.lat, attrs.lng], null, opts, style);
             }
-
-            marker = addMarker(map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
 
             element.bind('$destroy', function() {
               if(controller.$scope.isClusteringMarkers) {

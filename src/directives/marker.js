@@ -1,4 +1,24 @@
 angular.module('angularMapbox').directive('marker', function($compile) {
+  var _colors = {
+    navy: '#001f3f',
+    blue: '#0074d9',
+    aqua: '#7fdbff',
+    teal: '#39cccc',
+    olive: '#3d9970',
+    green: '#2ecc40',
+    lime: '#01ff70',
+    yellow: '#ffdc00',
+    orange: '#ff851b',
+    red: '#ff4136',
+    fuchsia: '#f012be',
+    purple: '#b10dc9',
+    maroon: '#85144b',
+    white: 'white',
+    silver: '#dddddd',
+    gray: '#aaaaaa',
+    black: '#111111'
+  };
+
   return {
     restrict: 'E',
     require: '^mapbox',
@@ -15,7 +35,13 @@ angular.module('angularMapbox').directive('marker', function($compile) {
           opts['marker-size'] = attrs.size;
         }
         if(attrs.color) {
-          opts['marker-color'] = attrs.color;
+          if(attrs.color[0] === '#') {
+            opts['marker-color'] = attrs.color;
+          } else {
+            opts['marker-color'] = _colors[attrs.color] || attrs.color;
+          }
+          console.log('color: ');
+          console.log(opts['marker-color']);
         }
         if(attrs.symbol) {
           opts['marker-symbol'] = attrs.symbol;

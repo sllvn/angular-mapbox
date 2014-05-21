@@ -3,7 +3,6 @@ angular.module('angularMapbox').directive('featureLayer', function() {
     restrict: 'E',
     require: '^mapbox',
     link: function(scope, element, attrs, controller) {
-      console.log('link');
       if(attrs.data) {
         controller.getMap().then(function(map) {
           var geojsonObject = scope.$eval(attrs.data);

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapbox Angular directive</title>
+  <link href="../dist/angular-mapbox-standalone.css" rel="stylesheet" />
+</head>
+<body>
+  <mapbox map-id="licyeus.i9pkgkg8" lat="47.603569" lng="-122.329453" scale-to-fit>
+    <marker lat="47.615244" lng="-122.320800" color="teal" icon="grocery">
+      <h1>Capitol Hill Farmer's Market</h1>
+      <p>Sundays, 11am-3pm, year round</p>
+    </marker>
+
+    <marker lat="47.448620" lng="-122.298981" color="blue" icon="airport">
+      <h1>SEATAC</h1>
+    </marker>
+
+    <feature-layer url="LINK.geojson"></feature-layer>
+
+    <marker current-location></marker>
+  </mapbox>
+
+  <script src="../dist/angular-mapbox-standalone.js"></script>
+</body>
+</html>
+

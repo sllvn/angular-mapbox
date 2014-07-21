@@ -1,0 +1,27 @@
+{
+  "name": "angular-mapbox",
+  "version": "0.1.0",
+  "homepage": "https://github.com/licyeus/angular-mapbox",
+  "authors": [
+    "Andrew Sullivan"
+  ],
+  "description": "Easy Angular directives for Mapbox.js",
+  "main": "angular-mapbox.js",
+  "keywords": [
+    "mapbox",
+    "angular",
+    "directive",
+    "mapbox.js",
+    "map",
+    "box"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}

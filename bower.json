@@ -6,7 +6,7 @@
     "Andrew Sullivan"
   ],
   "description": "Easy Angular directives for Mapbox.js",
-  "main": "angular-mapbox.js",
+  "main": "dist/angular-mapbox.js",
   "keywords": [
     "mapbox",
     "angular",

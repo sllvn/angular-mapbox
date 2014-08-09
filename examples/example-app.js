@@ -69,4 +69,14 @@ angularMapboxExample.controller('demoController', function($scope) {
       }
     ]
   };
+
+  $scope.mapMovedCallback = function(bounds) {
+    console.log('You repositioned the map to:');
+    console.log(bounds);
+  };
+
+  $scope.mapZoomedCallback = function(bounds) {
+    console.log('You zoomed the map to:');
+    console.log(bounds);
+  };
 });

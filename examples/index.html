@@ -8,8 +8,16 @@
   <link rel="stylesheet" href="../lib/MarkerCluster.Default.css" />
 </head>
 <body ng-app="angular-mapbox-example" ng-controller="demoController">
-  <mapbox map-id="licyeus.i9pkgkg8" lat="47.643569" lng="-122.329453">
-    <marker ng-repeat="market in farmersMarkets | filter: filterTerm" lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="teal" icon="grocery">
+  <mapbox map-id="licyeus.i9pkgkg8"
+          lat="47.643569"
+          lng="-122.329453"
+          on-reposition="mapMovedCallback"
+          on-zoom="mapZoomedCallback">
+    <marker ng-repeat="market in farmersMarkets | filter: filterTerm"
+            lat="{{market.coords.lat}}"
+            lng="{{market.coords.lng}}"
+            color="teal"
+            icon="grocery">
       <h1>{{market.name}}</h1>
       <p>{{market.times}}</p>
     </marker>

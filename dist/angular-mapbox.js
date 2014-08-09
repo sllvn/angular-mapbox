@@ -56,6 +56,18 @@ angular.module('angularMapbox').directive('mapbox', function($compile, $q) {
         var group = new L.featureGroup(scope.markers);
         scope.map.fitBounds(group.getBounds());
       };
+
+      if(attrs.onReposition) {
+        scope.map.on('dragend', function() {
+          scope[attrs.onReposition](scope.map.getBounds());
+        });
+      }
+
+      if(attrs.onZoom) {
+        scope.map.on('zoomend', function() {
+          scope[attrs.onZoom](scope.map.getBounds());
+        });
+      }
     },
     template: '<div class="angular-mapbox-map" ng-transclude></div>',
     controller: function($scope) {

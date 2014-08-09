@@ -7,27 +7,21 @@
   <link rel="stylesheet" href="../lib/MarkerCluster.css" />
   <link rel="stylesheet" href="../lib/MarkerCluster.Default.css" />
 </head>
-<body ng-app="angular-mapbox-example">
-  <div ng-controller="demoController">
-    <mapbox map-id="licyeus.i2pd1g7j" lat="47.643569" lng="-122.329453" zoom="8" cluster-markers>
-      <div ng-repeat="market in farmersMarkets | filter: filterTerm">
-        <marker lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="teal" icon="grocery">
-          <h1>{{market.name}}</h1>
-          <p>{{market.times}}</p>
-        </marker>
-      </div>
+<body ng-app="angular-mapbox-example" ng-controller="demoController">
+  <mapbox map-id="licyeus.i9pkgkg8" lat="47.643569" lng="-122.329453">
+    <marker ng-repeat="market in farmersMarkets | filter: filterTerm" lat="{{market.coords.lat}}" lng="{{market.coords.lng}}" color="teal" icon="grocery">
+      <h1>{{market.name}}</h1>
+      <p>{{market.times}}</p>
+    </marker>
+  </mapbox>
 
-      <marker current-location></marker>
-    </mapbox>
-
-    <input type="text" ng-model="filterTerm" placeholder="search markets">
-    <ul ng-repeat="market in farmersMarkets | filter: filterTerm">
-      <li>
-        <h3>{{market.name}}</h3>
-        <p>{{market.times}}</p>
-      </li>
-    </div>
-  </div>
+  <input type="text" ng-model="filterTerm" placeholder="search markets">
+  <ul>
+    <li ng-repeat="market in farmersMarkets | filter: filterTerm">
+      <h3>{{market.name}}</h3>
+      <p>{{market.times}}</p>
+    </li>
+  </ul>
 
   <script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
   <script src="../lib/angular-1.2.js"></script>

@@ -3,7 +3,7 @@ var gulp       = require('gulp'),
     uglify     = require('gulp-uglify'),
     ngmin      = require('gulp-ngmin'),
     jshint     = require('gulp-jshint'),
-    concatCss = require('gulp-concat-css'),
+    concatCss  = require('gulp-concat-css'),
     livereload = require('gulp-livereload');
 
 gulp.task('scripts', function() {

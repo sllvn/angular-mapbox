@@ -7,13 +7,13 @@ var gulp       = require('gulp'),
     livereload = require('gulp-livereload');
 
 gulp.task('scripts', function() {
-  return gulp.src(['src/angular-mapbox.js', 'src/**/*.js'])
+  return gulp.src(['src/angular-mapbox.module.js', 'src/**/*.js'])
     .pipe(concat('angular-mapbox.js'))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build', function() {
-  return gulp.src(['src/angular-mapbox.js', 'src/**/*.js'])
+  return gulp.src(['src/angular-mapbox.module.js', 'src/**/*.js'])
     .pipe(concat('angular-mapbox.min.js'))
     .pipe(ngmin())
     .pipe(uglify({ mangle: false }))

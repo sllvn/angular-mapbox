@@ -8,6 +8,30 @@
 (function() {
   'use strict';
 
+  angular.module('angular-mapbox').service('mapboxService', mapboxService);
+
+  function mapboxService() {
+    var _mapInstances = [];
+
+    var service = {
+      getMapInstances: getMapInstances,
+      addMapInstance: addMapInstance
+    };
+    return service;
+
+    function addMapInstance(map) {
+      _mapInstances.push(map);
+    }
+
+    function getMapInstances() {
+      return _mapInstances;
+    }
+  }
+})();
+
+(function() {
+  'use strict';
+
   angular.module('angular-mapbox').directive('featureLayer', function() {
     return {
       restrict: 'E',
@@ -35,7 +59,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('mapbox', function($compile, $q) {
+  angular.module('angular-mapbox').directive('mapbox', function($compile, $q, mapboxService) {
     var _mapboxMap;
 
     return {
@@ -46,6 +70,7 @@
       link: function(scope, element, attrs) {
         scope.map = L.mapbox.map(element[0], attrs.mapId);
         _mapboxMap.resolve(scope.map);
+        mapboxService.addMapInstance(scope.map);
 
         var mapWidth = attrs.width || 500;
         var mapHeight = attrs.height || 500;

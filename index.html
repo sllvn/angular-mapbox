@@ -59,6 +59,11 @@
         <p>Creating a map is easy, just add:</p>
         <pre class="prettyprint" data-type="html"><code>&lt;mapbox map-id="YOUR-MAP-ID" lat="47.603569" lng="-122.329453"&gt;&lt;/mapbox&gt;</code></pre>
         <p>The <code>lat</code>, <code>lng</code>, and <code>zoom</code> attributes are optional. Zoom will default to 12 if lat/lng are provided.</p>
+        <div class="alert alert-warning">
+          <p>As of Mapbox.js 2.0, a Mapbox API access token is also required. In your Angular app, set the access token with the following line:</p>
+          <pre class="prettyprint" data-type="javascript"><code>mapboxService.init({ accessToken: 'YOUR_ACCESS_TOKEN' });</code></pre>
+          <p>To generate your access token, visit <a href="https://www.mapbox.com/account/apps/">your Mapbox apps dashboard</a>.</p>
+        </div>
       </div>
       <div class="col-md-5">
         <mapbox map-id="licyeus.i2pd1g7j" lat="47.603569" lng="-122.329453"></mapbox>

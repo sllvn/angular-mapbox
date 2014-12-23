@@ -1,6 +1,8 @@
 var angularMapboxExample = angular.module('angular-mapbox-example', ['angular-mapbox']);
 
-angularMapboxExample.controller('demoController', function($scope) {
+angularMapboxExample.controller('demoController', function($scope, mapboxService) {
+  mapboxService.init({ accessToken: 'pk.eyJ1IjoibGljeWV1cyIsImEiOiJuZ1gtOWtjIn0.qaaGvywaJ_kCmwmlTSNyVw' });
+
   $scope.farmersMarkets = [
     {
       "name": "Capitol Hill Farmer's Market",

@@ -23,5 +23,8 @@
     "app/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "mapbox.js": "~2.1.3"
+  }
 }

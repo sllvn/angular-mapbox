@@ -11,12 +11,15 @@
   angular.module('angular-mapbox').service('mapboxService', mapboxService);
 
   function mapboxService() {
-    var _mapInstances = [];
+    var _mapInstances = [],
+        _markers = [];
 
     var service = {
       init: init,
       getMapInstances: getMapInstances,
-      addMapInstance: addMapInstance
+      addMapInstance: addMapInstance,
+      getMarkers: getMarkers,
+      addMarker: addMarker
     };
     return service;
 
@@ -34,6 +37,15 @@
 
     function getMapInstances() {
       return _mapInstances;
+    }
+
+    function addMarker(marker) {
+      // TODO: tie markers to specific map instance
+      _markers.push(marker);
+    }
+
+    function getMarkers() {
+      return _markers;
     }
   }
 })();
@@ -115,8 +127,8 @@
         }
       },
       template: '<div class="angular-mapbox-map" ng-transclude></div>',
-      controller: function($scope) {
-        $scope.markers = [];
+      controller: function($scope, mapboxService) {
+        $scope.markers = mapboxService.getMarkers();
         $scope.featureLayers = [];
 
         _mapboxMap = $q.defer();
@@ -141,7 +153,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('marker', function($compile) {
+  angular.module('angular-mapbox').directive('marker', function($compile, mapboxService) {
     var _colors = {
       navy: '#001f3f',
       blue: '#0074d9',
@@ -206,7 +218,7 @@
           // does not let us pass other opts (eg, draggable) in
           if(opts.draggable) marker.dragging.enable();
 
-          controller.$scope.markers.push(marker);
+          mapboxService.addMarker(marker);
           controller.$scope.fitMapToMarkers();
 
           return marker;

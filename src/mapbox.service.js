@@ -4,12 +4,15 @@
   angular.module('angular-mapbox').service('mapboxService', mapboxService);
 
   function mapboxService() {
-    var _mapInstances = [];
+    var _mapInstances = [],
+        _markers = [];
 
     var service = {
       init: init,
       getMapInstances: getMapInstances,
-      addMapInstance: addMapInstance
+      addMapInstance: addMapInstance,
+      getMarkers: getMarkers,
+      addMarker: addMarker
     };
     return service;
 
@@ -27,6 +30,15 @@
 
     function getMapInstances() {
       return _mapInstances;
+    }
+
+    function addMarker(marker) {
+      // TODO: tie markers to specific map instance
+      _markers.push(marker);
+    }
+
+    function getMarkers() {
+      return _markers;
     }
   }
 })();

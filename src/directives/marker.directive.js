@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('marker', function($compile) {
+  angular.module('angular-mapbox').directive('marker', function($compile, mapboxService) {
     var _colors = {
       navy: '#001f3f',
       blue: '#0074d9',
@@ -66,7 +66,7 @@
           // does not let us pass other opts (eg, draggable) in
           if(opts.draggable) marker.dragging.enable();
 
-          controller.$scope.markers.push(marker);
+          mapboxService.addMarker(marker);
           controller.$scope.fitMapToMarkers();
 
           return marker;

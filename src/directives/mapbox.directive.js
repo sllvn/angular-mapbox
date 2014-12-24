@@ -48,8 +48,8 @@
         }
       },
       template: '<div class="angular-mapbox-map" ng-transclude></div>',
-      controller: function($scope) {
-        $scope.markers = [];
+      controller: function($scope, mapboxService) {
+        $scope.markers = mapboxService.getMarkers();
         $scope.featureLayers = [];
 
         _mapboxMap = $q.defer();

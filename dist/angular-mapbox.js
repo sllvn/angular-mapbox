@@ -12,7 +12,8 @@
 
   function mapboxService() {
     var _mapInstances = [],
-        _markers = [];
+        _markers = [],
+        _mapOptions = [];
 
     var service = {
       init: init,
@@ -31,8 +32,11 @@
       L.mapbox.accessToken = opts.accessToken;
     }
 
-    function addMapInstance(map) {
+    function addMapInstance(map, mapOptions) {
+      mapOptions = mapOptions || {};
+
       _mapInstances.push(map);
+      _mapOptions.push(mapOptions);
     }
 
     function getMapInstances() {
@@ -91,7 +95,11 @@
       link: function(scope, element, attrs) {
         scope.map = L.mapbox.map(element[0], attrs.mapId);
         _mapboxMap.resolve(scope.map);
-        mapboxService.addMapInstance(scope.map);
+        var mapOptions = {
+          clusterMarkers: attrs.clusterMarkers !== undefined,
+          scaleToFit: attrs.scaleToFit !== undefined
+        };
+        mapboxService.addMapInstance(scope.map, mapOptions);
 
         var mapWidth = attrs.width || 500;
         var mapHeight = attrs.height || 500;
@@ -103,8 +111,10 @@
           scope.map.setView([attrs.lat, attrs.lng], zoom);
         }
 
+        // TODO: refactor this option into mapService
         scope.isClusteringMarkers = attrs.clusterMarkers !== undefined;
 
+        // TODO: refactor this option into mapService
         var shouldRefitMap = attrs.scaleToFit !== undefined;
         scope.fitMapToMarkers = function() {
           if(!shouldRefitMap) return;

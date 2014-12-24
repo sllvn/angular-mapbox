@@ -5,7 +5,8 @@
 
   function mapboxService() {
     var _mapInstances = [],
-        _markers = [];
+        _markers = [],
+        _mapOptions = [];
 
     var service = {
       init: init,
@@ -24,8 +25,11 @@
       L.mapbox.accessToken = opts.accessToken;
     }
 
-    function addMapInstance(map) {
+    function addMapInstance(map, mapOptions) {
+      mapOptions = mapOptions || {};
+
       _mapInstances.push(map);
+      _mapOptions.push(mapOptions);
     }
 
     function getMapInstances() {

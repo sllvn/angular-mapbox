@@ -67,7 +67,7 @@
           if(opts.draggable) marker.dragging.enable();
 
           mapboxService.addMarker(marker);
-          controller.$scope.fitMapToMarkers();
+          //mapboxService.fitMapToMarkers(map); // TODO: debounce this
 
           return marker;
         };

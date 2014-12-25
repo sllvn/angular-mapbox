@@ -8,12 +8,20 @@
         _markers = [],
         _mapOptions = [];
 
+    var fitMapToMarkers = debounce(function() {
+      // TODO: refactor
+      var map = _mapInstances[0];
+      var group = new L.featureGroup(getMarkers());
+      map.fitBounds(group.getBounds());
+    }, 0);
+
     var service = {
       init: init,
       getMapInstances: getMapInstances,
       addMapInstance: addMapInstance,
       getMarkers: getMarkers,
-      addMarker: addMarker
+      addMarker: addMarker,
+      fitMapToMarkers: fitMapToMarkers
     };
     return service;
 
@@ -30,6 +38,7 @@
 
       _mapInstances.push(map);
       _mapOptions.push(mapOptions);
+      _markers.push([]);
     }
 
     function getMapInstances() {
@@ -38,11 +47,46 @@
 
     function addMarker(marker) {
       // TODO: tie markers to specific map instance
-      _markers.push(marker);
+      var map = getMapInstances()[0];
+      _markers[0].push(marker);
+
+      var opts = getOptionsForMap(map);
+      if(opts.scaleToFit) {
+        fitMapToMarkers(map);
+      }
+    }
+
+    // TODO: move to utils
+    function debounce(func, wait, immediate) {
+      var timeout;
+
+      return function() {
+        var context = this,
+            args = arguments;
+
+        var later = function() {
+          timeout = null;
+          if (!immediate) {
+            func.apply(context, args);
+          }
+        };
+
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) {
+          func.apply(context, args);
+        }
+      };
     }
 
     function getMarkers() {
-      return _markers;
+      return _markers[0];
+    }
+
+    function getOptionsForMap(map) { // jshint ignore:line
+      // TODO: get options for specific map instance
+      return _mapOptions[0];
     }
   }
 })();

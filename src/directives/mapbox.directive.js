@@ -31,16 +31,6 @@
         // TODO: refactor this option into mapService
         scope.isClusteringMarkers = attrs.clusterMarkers !== undefined;
 
-        // TODO: refactor this option into mapService
-        var shouldRefitMap = attrs.scaleToFit !== undefined;
-        scope.fitMapToMarkers = function() {
-          if(!shouldRefitMap) return;
-          // TODO: only call this after all markers have been added, instead of per marker add
-
-          var group = new L.featureGroup(scope.markers);
-          scope.map.fitBounds(group.getBounds());
-        };
-
         if(attrs.onReposition) {
           scope.map.on('dragend', function() {
             scope[attrs.onReposition](scope.map.getBounds());

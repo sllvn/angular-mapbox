@@ -32,8 +32,8 @@
         var style = setStyleOptions(attrs);
         var marker;
 
-        function setStyleOptions(attrs, default_opts) {
-          var opts = default_opts || {};
+        function setStyleOptions(attrs, defaultOpts) {
+          var opts = defaultOpts || {};
           if(attrs.size) {
             opts['marker-size'] = attrs.size;
           }
@@ -54,7 +54,9 @@
           opts = opts || {};
 
           var marker = L.mapbox.marker.style({ properties: style }, latlng);
-          if(popupContent && popupContent.length > 0) marker.bindPopup(popupContent);
+          if(popupContent && popupContent.length > 0) {
+            marker.bindPopup(popupContent);
+          }
 
           if(controller.$scope.isClusteringMarkers && opts.excludeFromClustering !== true) {
             controller.$scope.clusterGroup.addLayer(marker);
@@ -64,7 +66,9 @@
 
           // this needs to come after being added to map because the L.mapbox.marker.style() factory
           // does not let us pass other opts (eg, draggable) in
-          if(opts.draggable) marker.dragging.enable();
+          if(opts.draggable) {
+            marker.dragging.enable();
+          }
 
           mapboxService.addMarker(marker);
           //mapboxService.fitMapToMarkers(map); // TODO: debounce this
@@ -84,11 +88,13 @@
         };
 
         controller.getMap().then(function(map) {
-          map.on('popupopen', function(e) {
+          map.on('popupopen', function() {
             // ensure that popups are compiled
             var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
             $compile(popup)(scope);
-            if(!scope.$$phase) scope.$digest();
+            if(!scope.$$phase) {
+              scope.$digest();
+            }
           });
 
           setTimeout(function() {
@@ -96,7 +102,9 @@
             var popupHTML = '';
             var transcluded = transclude(scope, function() {});
             for(var i = 0; i < transcluded.length; i++) {
-              if(transcluded[i].outerHTML !== undefined) popupHTML += transcluded[i].outerHTML;
+              if(transcluded[i].outerHTML !== undefined) {
+                popupHTML += transcluded[i].outerHTML;
+              }
             }
 
             if(attrs.currentLocation !== undefined) {
@@ -105,7 +113,9 @@
               if(popupHTML) {
                 var popup = angular.element(popupHTML);
                 $compile(popup)(scope);
-                if(!scope.$$phase) scope.$digest();
+                if(!scope.$$phase) {
+                  scope.$digest();
+                }
 
                 var newPopupHTML = '';
                 for(i = 0; i < popup.length; i++) {

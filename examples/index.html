@@ -8,11 +8,20 @@
   <link rel="stylesheet" href="lib/MarkerCluster.Default.css">
 </head>
 <body ng-app="angular-mapbox-example" ng-controller="demoController">
-  <mapbox map-id="licyeus.i9pkgkg8"
+  <input type="text" ng-model="status">
+  {{ status }}
+  <mapbox map-id="licyeus.XXXi9pkgkg8"
           lat="47.643569"
           lng="-122.329453"
           on-reposition="mapMovedCallback"
-          on-zoom="mapZoomedCallback">
+          on-zoom="mapZoomedCallback"
+          zoom="12" scale-to-fit>
+
+    <marker lat="47.643569" lng="-122.329453" color="blue" icon="zoo">
+      <h1>status: {{ status }}</h1>
+      {{ farmersMarkets[0] | json}}
+    </marker>
+
     <marker ng-repeat="market in farmersMarkets | filter: filterTerm"
             lat="{{market.coords.lat}}"
             lng="{{market.coords.lng}}"

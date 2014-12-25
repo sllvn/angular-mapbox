@@ -3,8 +3,12 @@
 
   var angularMapboxExample = angular.module('angular-mapbox-example', ['angular-mapbox']);
 
-  angularMapboxExample.controller('demoController', function($scope, mapboxService) {
+  angularMapboxExample.controller('demoController', function($scope, $timeout, mapboxService) {
     mapboxService.init({ accessToken: 'pk.eyJ1IjoibGljeWV1cyIsImEiOiJuZ1gtOWtjIn0.qaaGvywaJ_kCmwmlTSNyVw' });
+    $timeout(function() {
+      var map = mapboxService.getMapInstances()[0];
+      //mapboxService.fitMapToMarkers(map);
+    }, 100);
 
     $scope.farmersMarkets = [
       {
@@ -82,7 +86,7 @@
 
     $scope.mapZoomedCallback = function(bounds) {
       console.log('You zoomed the map to:');
-      console.log(bounds);
+      console.log(bounds.getCenter().toString());
     };
   });
 

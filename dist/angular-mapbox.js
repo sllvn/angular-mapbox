@@ -28,7 +28,8 @@
       addMapInstance: addMapInstance,
       getMarkers: getMarkers,
       addMarker: addMarker,
-      fitMapToMarkers: fitMapToMarkers
+      fitMapToMarkers: fitMapToMarkers,
+      getOptionsForMap: getOptionsForMap
     };
     return service;
 
@@ -155,9 +156,6 @@
           scope.map.setView([attrs.lat, attrs.lng], zoom);
         }
 
-        // TODO: refactor this option into mapService
-        scope.isClusteringMarkers = attrs.clusterMarkers !== undefined;
-
         if(attrs.onReposition) {
           scope.map.on('dragend', function() {
             scope[attrs.onReposition](scope.map.getBounds());
@@ -254,7 +252,7 @@
             marker.bindPopup(popupContent);
           }
 
-          if(controller.$scope.isClusteringMarkers && opts.excludeFromClustering !== true) {
+          if(mapboxService.getOptionsForMap(map).clusterMarkers && opts.excludeFromClustering !== true) {
             controller.$scope.clusterGroup.addLayer(marker);
           } else {
             marker.addTo(map);
@@ -267,7 +265,6 @@
           }
 
           mapboxService.addMarker(marker);
-          //mapboxService.fitMapToMarkers(map); // TODO: debounce this
 
           return marker;
         };
@@ -324,7 +321,7 @@
               }
 
               element.bind('$destroy', function() {
-                if(controller.$scope.isClusteringMarkers) {
+                if(mapboxService.getOptionsForMap(map).clusterMarkers) {
                   controller.$scope.clusterGroup.removeLayer(marker);
                 } else {
                   map.removeLayer(marker);

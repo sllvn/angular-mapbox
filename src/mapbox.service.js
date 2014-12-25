@@ -21,7 +21,8 @@
       addMapInstance: addMapInstance,
       getMarkers: getMarkers,
       addMarker: addMarker,
-      fitMapToMarkers: fitMapToMarkers
+      fitMapToMarkers: fitMapToMarkers,
+      getOptionsForMap: getOptionsForMap
     };
     return service;
 

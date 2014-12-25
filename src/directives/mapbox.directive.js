@@ -28,9 +28,6 @@
           scope.map.setView([attrs.lat, attrs.lng], zoom);
         }
 
-        // TODO: refactor this option into mapService
-        scope.isClusteringMarkers = attrs.clusterMarkers !== undefined;
-
         if(attrs.onReposition) {
           scope.map.on('dragend', function() {
             scope[attrs.onReposition](scope.map.getBounds());

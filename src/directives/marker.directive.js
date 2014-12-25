@@ -58,7 +58,7 @@
             marker.bindPopup(popupContent);
           }
 
-          if(controller.$scope.isClusteringMarkers && opts.excludeFromClustering !== true) {
+          if(mapboxService.getOptionsForMap(map).clusterMarkers && opts.excludeFromClustering !== true) {
             controller.$scope.clusterGroup.addLayer(marker);
           } else {
             marker.addTo(map);
@@ -71,7 +71,6 @@
           }
 
           mapboxService.addMarker(marker);
-          //mapboxService.fitMapToMarkers(map); // TODO: debounce this
 
           return marker;
         };
@@ -128,7 +127,7 @@
               }
 
               element.bind('$destroy', function() {
-                if(controller.$scope.isClusteringMarkers) {
+                if(mapboxService.getOptionsForMap(map).clusterMarkers) {
                   controller.$scope.clusterGroup.removeLayer(marker);
                 } else {
                   map.removeLayer(marker);

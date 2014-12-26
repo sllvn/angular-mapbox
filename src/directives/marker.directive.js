@@ -37,15 +37,6 @@
       _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
-        map.on('popupopen', function() {
-          // ensure that popups are compiled
-          var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
-          $compile(popup)(scope);
-          if(!scope.$$phase) {
-            scope.$digest();
-          }
-        });
-
         $timeout(function() {
           // there's got to be a better way to programmatically access transcluded content
           var popupHTML = '';

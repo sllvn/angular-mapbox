@@ -37,50 +37,48 @@
       _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
-        $timeout(function() {
-          // there's got to be a better way to programmatically access transcluded content
-          var popupHTML = '';
-          var transcluded = transclude(scope, function() {});
-          for(var i = 0; i < transcluded.length; i++) {
-            if(transcluded[i].outerHTML !== undefined) {
-              popupHTML += transcluded[i].outerHTML;
-            }
+        // there's got to be a better way to programmatically access transcluded content
+        var popupHTML = '';
+        var transcluded = transclude(scope, function() {});
+        for(var i = 0; i < transcluded.length; i++) {
+          if(transcluded[i].outerHTML !== undefined) {
+            popupHTML += transcluded[i].outerHTML;
           }
+        }
 
-          if(attrs.currentLocation !== undefined) {
-            _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
-            _opts.excludeFromClustering = true;
-            map.on('locationfound', function(e) {
-              _marker = addMarker(controller.$scope, map, [e.latlng.lat, e.latlng.lng], null, _opts, _style);
-            });
-            map.locate();
+        if(attrs.currentLocation !== undefined) {
+          _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
+          _opts.excludeFromClustering = true;
+          map.on('locationfound', function(e) {
+            _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], null, _opts, _style);
+          });
+          map.locate();
+        } else {
+          if(popupHTML) {
+            var popup = angular.element(popupHTML);
+            $compile(popup)(scope);
+            if(!scope.$$phase) {
+              scope.$digest();
+            }
+
+            var newPopupHTML = '';
+            for(i = 0; i < popup.length; i++) {
+              newPopupHTML += popup[i].outerHTML;
+            }
+
+            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
           } else {
-            if(popupHTML) {
-              var popup = angular.element(popupHTML);
-              $compile(popup)(scope);
-              if(!scope.$$phase) {
-                scope.$digest();
-              }
-
-              var newPopupHTML = '';
-              for(i = 0; i < popup.length; i++) {
-                newPopupHTML += popup[i].outerHTML;
-              }
-
-              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
-            } else {
-              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], null, _opts, _style);
-            }
-
-            element.bind('$destroy', function() {
-              if(mapboxService.getOptionsForMap(map).clusterMarkers) {
-                controller.$scope.clusterGroup.removeLayer(_marker);
-              } else {
-                map.removeLayer(_marker);
-              }
-            });
+            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], null, _opts, _style);
           }
-        });
+
+          element.bind('$destroy', function() {
+            if(mapboxService.getOptionsForMap(map).clusterMarkers) {
+              scope.clusterGroup.removeLayer(_marker);
+            } else {
+              map.removeLayer(_marker);
+            }
+          });
+        }
       });
     }
 

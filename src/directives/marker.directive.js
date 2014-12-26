@@ -32,45 +32,32 @@
 
     function link(scope, element, attrs, controller, transclude) {
       var _marker, _opts, _style;
-      var popupHTML = '';
 
       _opts = { draggable: attrs.draggable !== undefined };
       _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
-        $timeout(function() {
-          // there's got to be a better way to programmatically access transcluded content
-          transclude(scope, function(clone) {
-            var newPopupHTML = '';
-            for(var i = 0; i < clone.length; i++) {
-              if(clone[i].outerHTML !== undefined) {
-                popupHTML += clone[i].outerHTML;
-              }
+        transclude(scope, function(transcludedContent) {
+          var popupContentElement;
+          if(transcludedContent) {
+            popupContentElement = document.createElement('span');
+            for(var i = 0; i < transcludedContent.length; i++) {
+              popupContentElement.appendChild(transcludedContent[i]);
             }
+          }
 
-            var popupContentElement;
-            if(popupHTML) {
-              popupContentElement = document.createElement('span');
-              var popup = angular.element(popupHTML);
-              $compile(popup)(scope);
-              for(i = 0; i < popup.length; i++) {
-                popupContentElement.appendChild(popup[i]);
-              }
-            }
+          if(attrs.currentLocation !== undefined) {
+            _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
+            _opts.excludeFromClustering = true;
 
-            if(attrs.currentLocation !== undefined) {
-              _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
-              _opts.excludeFromClustering = true;
+            map.on('locationfound', function(e) {
+              _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], popupContentElement, _opts, _style);
+            });
 
-              map.on('locationfound', function(e) {
-                _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], popupContentElement, _opts, _style);
-              });
-
-              map.locate();
-            } else {
-              _marker = addMarker(scope, map, [attrs.lat, attrs.lng], popupContentElement, _opts, _style);
-            }
-          });
+            map.locate();
+          } else {
+            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], popupContentElement, _opts, _style);
+          }
         });
 
         element.bind('$destroy', function() {

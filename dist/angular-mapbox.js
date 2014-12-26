@@ -231,57 +231,34 @@
       _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
-        map.on('popupopen', function() {
-          // ensure that popups are compiled
-          var popup = angular.element(document.getElementsByClassName('leaflet-popup-content'));
-          $compile(popup)(scope);
-          if(!scope.$$phase) {
-            scope.$digest();
-          }
-        });
-
-        $timeout(function() {
-          // there's got to be a better way to programmatically access transcluded content
-          var popupHTML = '';
-          var transcluded = transclude(scope, function() {});
-          for(var i = 0; i < transcluded.length; i++) {
-            if(transcluded[i].outerHTML !== undefined) {
-              popupHTML += transcluded[i].outerHTML;
+        transclude(scope, function(transcludedContent) {
+          var popupContentElement;
+          if(transcludedContent) {
+            popupContentElement = document.createElement('span');
+            for(var i = 0; i < transcludedContent.length; i++) {
+              popupContentElement.appendChild(transcludedContent[i]);
             }
           }
 
           if(attrs.currentLocation !== undefined) {
             _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
             _opts.excludeFromClustering = true;
+
             map.on('locationfound', function(e) {
-              _marker = addMarker(controller.$scope, map, [e.latlng.lat, e.latlng.lng], null, _opts, _style);
+              _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], popupContentElement, _opts, _style);
             });
+
             map.locate();
           } else {
-            if(popupHTML) {
-              var popup = angular.element(popupHTML);
-              $compile(popup)(scope);
-              if(!scope.$$phase) {
-                scope.$digest();
-              }
+            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], popupContentElement, _opts, _style);
+          }
+        });
 
-              var newPopupHTML = '';
-              for(i = 0; i < popup.length; i++) {
-                newPopupHTML += popup[i].outerHTML;
-              }
-
-              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
-            } else {
-              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], null, _opts, _style);
-            }
-
-            element.bind('$destroy', function() {
-              if(mapboxService.getOptionsForMap(map).clusterMarkers) {
-                controller.$scope.clusterGroup.removeLayer(_marker);
-              } else {
-                map.removeLayer(_marker);
-              }
-            });
+        element.bind('$destroy', function() {
+          if(mapboxService.getOptionsForMap(map).clusterMarkers) {
+            scope.clusterGroup.removeLayer(_marker);
+          } else {
+            map.removeLayer(_marker);
           }
         });
       });
@@ -309,7 +286,7 @@
       opts = opts || {};
 
       var marker = L.mapbox.marker.style({ properties: style }, latlng);
-      if(popupContent && popupContent.length > 0) {
+      if(popupContent) {
         marker.bindPopup(popupContent);
       }
 

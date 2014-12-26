@@ -31,9 +31,10 @@
     };
 
     function link(scope, element, attrs, controller, transclude) {
-      var opts = { draggable: attrs.draggable !== undefined };
-      var style = setStyleOptions(attrs);
-      var marker;
+      var _marker, _opts, _style;
+
+      _opts = { draggable: attrs.draggable !== undefined };
+      _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
         map.on('popupopen', function() {
@@ -56,10 +57,10 @@
           }
 
           if(attrs.currentLocation !== undefined) {
-            style = setStyleOptions(style, { 'marker-color': '#000', 'marker-symbol': 'star' });
-            opts.excludeFromClustering = true;
+            _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
+            _opts.excludeFromClustering = true;
             map.on('locationfound', function(e) {
-              marker = addMarker(controller.$scope, map, [e.latlng.lat, e.latlng.lng], null, opts, style);
+              _marker = addMarker(controller.$scope, map, [e.latlng.lat, e.latlng.lng], null, _opts, _style);
             });
             map.locate();
           } else {
@@ -75,16 +76,16 @@
                 newPopupHTML += popup[i].outerHTML;
               }
 
-              marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], newPopupHTML, opts, style);
+              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
             } else {
-              marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], null, opts, style);
+              _marker = addMarker(controller.$scope, map, [attrs.lat, attrs.lng], null, _opts, _style);
             }
 
             element.bind('$destroy', function() {
               if(mapboxService.getOptionsForMap(map).clusterMarkers) {
-                controller.$scope.clusterGroup.removeLayer(marker);
+                controller.$scope.clusterGroup.removeLayer(_marker);
               } else {
-                map.removeLayer(marker);
+                map.removeLayer(_marker);
               }
             });
           }

@@ -48,16 +48,13 @@
               }
             }
 
+            var popupContentElement;
             if(popupHTML) {
+              popupContentElement = document.createElement('span');
               var popup = angular.element(popupHTML);
-              var customLink = $compile(popup);
-              customLink(scope);
-              if(!scope.$$phase) {
-                scope.$apply();
-              }
-
+              $compile(popup)(scope);
               for(i = 0; i < popup.length; i++) {
-                newPopupHTML += popup[i].outerHTML;
+                popupContentElement.appendChild(popup[i]);
               }
             }
 
@@ -66,33 +63,13 @@
               _opts.excludeFromClustering = true;
 
               map.on('locationfound', function(e) {
-                _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], newPopupHTML, _opts, _style);
+                _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], popupContentElement, _opts, _style);
               });
 
               map.locate();
             } else {
-              _marker = addMarker(scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
+              _marker = addMarker(scope, map, [attrs.lat, attrs.lng], popupContentElement, _opts, _style);
             }
-
-            _marker.on('popupopen', function() {
-              // ensure that popups are compiled on open
-              // TODO: make this binding dynamic, so that content updates while popup remains open
-              var newPopupHTML = '';
-              if(popupHTML) {
-                var popup = angular.element(popupHTML);
-                var customLink = $compile(popup);
-                customLink(scope);
-                if(!scope.$$phase) {
-                  scope.$apply();
-                }
-
-                for(i = 0; i < popup.length; i++) {
-                  newPopupHTML += popup[i].outerHTML;
-                }
-
-                _marker.getPopup().setContent(newPopupHTML);
-              }
-            });
           });
         });
 
@@ -128,7 +105,7 @@
       opts = opts || {};
 
       var marker = L.mapbox.marker.style({ properties: style }, latlng);
-      if(popupContent && popupContent.length > 0) {
+      if(popupContent) {
         marker.bindPopup(popupContent);
       }
 

@@ -40,8 +40,8 @@
       controller.getMap().then(function(map) {
         $timeout(function() {
           // there's got to be a better way to programmatically access transcluded content
-          var newPopupHTML = '';
           transclude(scope, function(clone) {
+            var newPopupHTML = '';
             for(var i = 0; i < clone.length; i++) {
               if(clone[i].outerHTML !== undefined) {
                 popupHTML += clone[i].outerHTML;
@@ -51,7 +51,7 @@
             if(popupHTML) {
               var popup = angular.element(popupHTML);
               var customLink = $compile(popup);
-              var content = customLink(scope);
+              customLink(scope);
               if(!scope.$$phase) {
                 scope.$apply();
               }
@@ -74,6 +74,25 @@
               _marker = addMarker(scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
             }
 
+            _marker.on('popupopen', function() {
+              // ensure that popups are compiled on open
+              // TODO: make this binding dynamic, so that content updates while popup remains open
+              var newPopupHTML = '';
+              if(popupHTML) {
+                var popup = angular.element(popupHTML);
+                var customLink = $compile(popup);
+                customLink(scope);
+                if(!scope.$$phase) {
+                  scope.$apply();
+                }
+
+                for(i = 0; i < popup.length; i++) {
+                  newPopupHTML += popup[i].outerHTML;
+                }
+
+                _marker.getPopup().setContent(newPopupHTML);
+              }
+            });
           });
         });
 

@@ -32,53 +32,58 @@
 
     function link(scope, element, attrs, controller, transclude) {
       var _marker, _opts, _style;
+      var popupHTML = '';
 
       _opts = { draggable: attrs.draggable !== undefined };
       _style = setStyleOptions(attrs);
 
       controller.getMap().then(function(map) {
-        // there's got to be a better way to programmatically access transcluded content
-        var popupHTML = '';
-        var transcluded = transclude(scope, function() {});
-        for(var i = 0; i < transcluded.length; i++) {
-          if(transcluded[i].outerHTML !== undefined) {
-            popupHTML += transcluded[i].outerHTML;
-          }
-        }
-
-        if(attrs.currentLocation !== undefined) {
-          _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
-          _opts.excludeFromClustering = true;
-          map.on('locationfound', function(e) {
-            _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], null, _opts, _style);
-          });
-          map.locate();
-        } else {
-          if(popupHTML) {
-            var popup = angular.element(popupHTML);
-            $compile(popup)(scope);
-            if(!scope.$$phase) {
-              scope.$digest();
+        $timeout(function() {
+          // there's got to be a better way to programmatically access transcluded content
+          var newPopupHTML = '';
+          transclude(scope, function(clone) {
+            for(var i = 0; i < clone.length; i++) {
+              if(clone[i].outerHTML !== undefined) {
+                popupHTML += clone[i].outerHTML;
+              }
             }
 
-            var newPopupHTML = '';
-            for(i = 0; i < popup.length; i++) {
-              newPopupHTML += popup[i].outerHTML;
+            if(popupHTML) {
+              var popup = angular.element(popupHTML);
+              var customLink = $compile(popup);
+              var content = customLink(scope);
+              if(!scope.$$phase) {
+                scope.$apply();
+              }
+
+              for(i = 0; i < popup.length; i++) {
+                newPopupHTML += popup[i].outerHTML;
+              }
             }
 
-            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
-          } else {
-            _marker = addMarker(scope, map, [attrs.lat, attrs.lng], null, _opts, _style);
-          }
+            if(attrs.currentLocation !== undefined) {
+              _style = setStyleOptions(_style, { 'marker-color': '#000', 'marker-symbol': 'star' });
+              _opts.excludeFromClustering = true;
 
-          element.bind('$destroy', function() {
-            if(mapboxService.getOptionsForMap(map).clusterMarkers) {
-              scope.clusterGroup.removeLayer(_marker);
+              map.on('locationfound', function(e) {
+                _marker = addMarker(scope, map, [e.latlng.lat, e.latlng.lng], newPopupHTML, _opts, _style);
+              });
+
+              map.locate();
             } else {
-              map.removeLayer(_marker);
+              _marker = addMarker(scope, map, [attrs.lat, attrs.lng], newPopupHTML, _opts, _style);
             }
+
           });
-        }
+        });
+
+        element.bind('$destroy', function() {
+          if(mapboxService.getOptionsForMap(map).clusterMarkers) {
+            scope.clusterGroup.removeLayer(_marker);
+          } else {
+            map.removeLayer(_marker);
+          }
+        });
       });
     }
 

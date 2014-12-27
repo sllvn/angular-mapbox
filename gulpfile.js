@@ -24,12 +24,6 @@
       .pipe(gulp.dest('dist'));
   });
 
-  gulp.task('lint', function() {
-    return gulp.src('src/**/*.js')
-      .pipe(jshint())
-      .pipe(jshint.reporter('default'));
-  });
-
   gulp.task('watch', ['scripts'], function() {
     var server = livereload();
     gulp.watch('src/**/*.js', ['scripts']);

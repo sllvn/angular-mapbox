@@ -28,6 +28,7 @@
       addMapInstance: addMapInstance,
       getMarkers: getMarkers,
       addMarker: addMarker,
+      removeMarker: removeMarker,
       fitMapToMarkers: fitMapToMarkers,
       getOptionsForMap: getOptionsForMap
     };
@@ -57,6 +58,23 @@
 
       var opts = getOptionsForMap(map);
       if(opts.scaleToFit) {
+        fitMapToMarkers(map);
+      }
+    }
+
+    function removeMarker(map, marker) {
+      map.removeLayer(marker);
+
+      var markerIndexToRemove;
+      for(var i = 0, markers = getMarkers(); markers[i]; i++) {
+        if(markers[i]._leaflet_id === marker._leaflet_id) {
+          markerIndexToRemove = i;
+        }
+      }
+      markers.splice(markerIndexToRemove, 1);
+
+      var opts = getOptionsForMap(map);
+      if(opts.scaleToFit && opts.scaleToFitAll) {
         fitMapToMarkers(map);
       }
     }
@@ -139,7 +157,8 @@
         _mapboxMap.resolve(scope.map);
         var mapOptions = {
           clusterMarkers: attrs.clusterMarkers !== undefined,
-          scaleToFit: attrs.scaleToFit !== undefined
+          scaleToFit: attrs.scaleToFit !== undefined,
+          scaleToFitAll: attrs.scaleToFit === 'all'
         };
         mapboxService.addMapInstance(scope.map, mapOptions);
 
@@ -255,7 +274,7 @@
           if(mapboxService.getOptionsForMap(map).clusterMarkers) {
             scope.clusterGroup.removeLayer(_marker);
           } else {
-            map.removeLayer(_marker);
+            mapboxService.removeMarker(map, _marker);
           }
         });
       });

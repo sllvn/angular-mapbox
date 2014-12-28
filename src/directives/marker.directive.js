@@ -64,7 +64,7 @@
           if(mapboxService.getOptionsForMap(map).clusterMarkers) {
             scope.clusterGroup.removeLayer(_marker);
           } else {
-            map.removeLayer(_marker);
+            mapboxService.removeMarker(map, _marker);
           }
         });
       });

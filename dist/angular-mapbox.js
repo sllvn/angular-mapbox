@@ -34,10 +34,7 @@
     return service;
 
     function init(opts) {
-      if(!opts.accessToken) {
-        throw 'MissingMapboxApiToken';
-      }
-
+      opts = opts || {};
       L.mapbox.accessToken = opts.accessToken;
     }
 

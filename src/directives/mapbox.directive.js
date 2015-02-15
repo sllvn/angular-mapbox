@@ -24,9 +24,9 @@
         element.css('width', mapWidth + 'px');
         element.css('height', mapHeight + 'px');
 
-        var zoom = attrs.zoom || 12;
+        scope.zoom = attrs.zoom || 12;
         if(attrs.lat && attrs.lng) {
-          scope.map.setView([attrs.lat, attrs.lng], zoom);
+          scope.map.setView([attrs.lat, attrs.lng], scope.zoom);
         }
 
         if(attrs.onReposition) {
@@ -40,6 +40,9 @@
             scope[attrs.onZoom](scope.map.getBounds());
           });
         }
+
+        attrs.$observe('lat', function(){scope.map.setView([attrs.lat, attrs.lng], scope.zoom);});
+        attrs.$observe('lng', function(){scope.map.setView([attrs.lat, attrs.lng], scope.zoom);});
       },
       template: '<div class="angular-mapbox-map" ng-transclude></div>',
       controller: function($scope, mapboxService) {

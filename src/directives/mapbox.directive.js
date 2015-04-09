@@ -41,8 +41,15 @@
           });
         }
 
-        attrs.$observe('lat', function(){scope.map.setView([attrs.lat, attrs.lng], scope.zoom);});
-        attrs.$observe('lng', function(){scope.map.setView([attrs.lat, attrs.lng], scope.zoom);});
+        var refreshMap = function() {
+          if (!attrs.lat || !attrs.lng || !attrs.zoom) {
+            return;
+          }
+          scope.map.setView([attrs.lat, attrs.lng], attrs.zoom);
+        }
+        attrs.$observe('lat', refreshMap);
+        attrs.$observe('lng', refreshMap);
+        attrs.$observe('zoom', refreshMap);
       },
       template: '<div class="angular-mapbox-map" ng-transclude></div>',
       controller: function($scope, mapboxService) {

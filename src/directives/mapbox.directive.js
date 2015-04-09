@@ -46,7 +46,7 @@
             return;
           }
           scope.map.setView([attrs.lat, attrs.lng], attrs.zoom);
-        }
+        };
         attrs.$observe('lat', refreshMap);
         attrs.$observe('lng', refreshMap);
         attrs.$observe('zoom', refreshMap);

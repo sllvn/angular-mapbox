@@ -61,7 +61,9 @@
             if(attrs.onClick) {
               var clickFn = $parse(attrs.onClick, null, true);
               _marker.on('click', function() {
-                clickFn(scope, {$event:event});
+                scope.$apply(function() {
+                  clickFn(scope, {$event:event});
+                });
               });
             }
           }

@@ -39,7 +39,7 @@
       controller.getMap().then(function(map) {
         transclude(scope, function(transcludedContent) {
           var popupContentElement;
-          if(transcludedContent) {
+          if(transcludedContent != null && transcludedContent.length > 0) {
             popupContentElement = document.createElement('span');
             for(var i = 0; i < transcludedContent.length; i++) {
               popupContentElement.appendChild(transcludedContent[i]);

@@ -122,24 +122,27 @@
       restrict: 'E',
       require: '^mapbox',
       link: function(scope, element, attrs, controller) {
-        if(attrs.data) {
-          controller.getMap().then(function(map) {
+        var featureLayer;
+        controller.getMap().then(function(map) {
+          if(attrs.data) {
             var geojsonObject = scope.$eval(attrs.data);
-            var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
-            controller.$scope.featureLayers.push(featureLayer);
-          });
-        } else if(attrs.url) {
-          controller.getMap().then(function(map) {
-            var featureLayer = L.mapbox.featureLayer().addTo(map);
+            featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
+          } else if(attrs.url) {
+            featureLayer = L.mapbox.featureLayer().addTo(map);
             featureLayer.loadURL(attrs.url);
+          }
+          if (featureLayer) {
             controller.$scope.featureLayers.push(featureLayer);
-          });
-        }
+            element.bind('$destroy', function() {
+              map.removeLayer(featureLayer);
+              controller.$scope.featureLayers.pop(featureLayer);
+            });
+          }
+        });
       }
     };
   });
 })();
-
 
 (function() {
     'use strict';
@@ -392,7 +395,7 @@
       controller.getMap().then(function(map) {
         transclude(scope, function(transcludedContent) {
           var popupContentElement;
-          if(transcludedContent) {
+          if(transcludedContent != null && transcludedContent.length > 0) {
             popupContentElement = document.createElement('span');
             for(var i = 0; i < transcludedContent.length; i++) {
               popupContentElement.appendChild(transcludedContent[i]);

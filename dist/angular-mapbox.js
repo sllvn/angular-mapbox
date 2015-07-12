@@ -36,6 +36,7 @@
 
     function init(opts) {
       opts = opts || {};
+      service.opts = opts;
       L.mapbox.accessToken = opts.accessToken;
     }
 
@@ -126,6 +127,9 @@
           controller.getMap().then(function(map) {
             var geojsonObject = scope.$eval(attrs.data);
             var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
+            if(controller.$scope.fitBounds) {
+              map.fitBounds(featureLayer.getBounds());
+            }
             controller.$scope.featureLayers.push(featureLayer);
           });
         } else if(attrs.url) {
@@ -139,7 +143,6 @@
     };
   });
 })();
-
 
 (function() {
     'use strict';
@@ -286,7 +289,7 @@
       scope: true,
       replace: true,
       link: function(scope, element, attrs) {
-        scope.map = L.mapbox.map(element[0], attrs.mapId);
+        scope.map = L.mapbox.map(element[0], attrs.mapId || mapboxService.opts.mapId);
         _mapboxMap.resolve(scope.map);
         var mapOptions = {
           clusterMarkers: attrs.clusterMarkers !== undefined,
@@ -315,6 +318,10 @@
           scope.map.on('zoomend', function() {
             scope[attrs.onZoom](scope.map.getBounds());
           });
+        }
+
+        if(attrs.fitBounds !== undefined) {
+          scope.fitBounds = true;
         }
 
         var refreshMap = function() {
@@ -349,7 +356,6 @@
     };
   });
 })();
-
 
 (function() {
   'use strict';
@@ -392,7 +398,7 @@
       controller.getMap().then(function(map) {
         transclude(scope, function(transcludedContent) {
           var popupContentElement;
-          if(transcludedContent) {
+          if(transcludedContent != null && transcludedContent.length > 0) {
             popupContentElement = document.createElement('span');
             for(var i = 0; i < transcludedContent.length; i++) {
               popupContentElement.appendChild(transcludedContent[i]);

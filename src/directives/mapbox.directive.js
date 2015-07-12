@@ -10,7 +10,7 @@
       scope: true,
       replace: true,
       link: function(scope, element, attrs) {
-        scope.map = L.mapbox.map(element[0], attrs.mapId);
+        scope.map = L.mapbox.map(element[0], attrs.mapId || mapboxService.opts.mapId);
         _mapboxMap.resolve(scope.map);
         var mapOptions = {
           clusterMarkers: attrs.clusterMarkers !== undefined,
@@ -39,6 +39,10 @@
           scope.map.on('zoomend', function() {
             scope[attrs.onZoom](scope.map.getBounds());
           });
+        }
+
+        if(attrs.fitBounds !== undefined) {
+          scope.fitBounds = true;
         }
 
         var refreshMap = function() {
@@ -73,4 +77,3 @@
     };
   });
 })();
-

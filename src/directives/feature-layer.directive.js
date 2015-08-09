@@ -10,6 +10,9 @@
           controller.getMap().then(function(map) {
             var geojsonObject = scope.$eval(attrs.data);
             var featureLayer = L.mapbox.featureLayer(geojsonObject).addTo(map);
+            if(controller.$scope.fitBounds) {
+              map.fitBounds(featureLayer.getBounds());
+            }
             controller.$scope.featureLayers.push(featureLayer);
           });
         } else if(attrs.url) {
@@ -23,4 +26,3 @@
     };
   });
 })();
-

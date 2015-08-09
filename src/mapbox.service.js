@@ -29,6 +29,7 @@
 
     function init(opts) {
       opts = opts || {};
+      service.opts = opts;
       L.mapbox.accessToken = opts.accessToken;
     }
 

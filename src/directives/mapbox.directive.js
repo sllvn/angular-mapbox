@@ -19,10 +19,12 @@
         };
         mapboxService.addMapInstance(scope.map, mapOptions);
 
-        var mapWidth = attrs.width || 500;
-        var mapHeight = attrs.height || 500;
-        element.css('width', mapWidth + (/^[0-9]+$/.test(mapWidth)?'px':''));
-        element.css('height', mapHeight + (/^[0-9]+$/.test(mapHeight)?'px':''));
+        if (attrs.autoSize === undefined ) {
+            var mapWidth = attrs.width || 500;
+            var mapHeight = attrs.height || 500;
+            element.css('width', mapWidth + (/^[0-9]+$/.test(mapWidth)?'px':''));
+            element.css('height', mapHeight + (/^[0-9]+$/.test(mapHeight)?'px':''));
+        }
 
         scope.zoom = attrs.zoom || 12;
         if(attrs.lat && attrs.lng) {
@@ -73,4 +75,3 @@
     };
   });
 })();
-

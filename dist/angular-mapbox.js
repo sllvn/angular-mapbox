@@ -280,7 +280,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('mapbox', function($compile, $q, mapboxService) {
+  angular.module('angular-mapbox').directive('mapbox', function($compile, $q, $parse, mapboxService) {
     var _mapboxMap;
 
     return {
@@ -298,10 +298,23 @@
         };
         mapboxService.addMapInstance(scope.map, mapOptions);
 
+        if (attrs.dragging === 'false') {
+          scope.map.dragging.disable();
+        }
+        if (attrs.touchZoom === 'false') {
+          scope.map.touchZoom.disable();
+        }
+        if (attrs.doubleClickZoom === 'false') {
+          scope.map.doubleClickZoom.disable();
+        }
+        if (attrs.scrollWheelZoom === 'false') {
+          scope.map.scrollWheelZoom.disable();
+        }
+
         var mapWidth = attrs.width || 500;
         var mapHeight = attrs.height || 500;
-        element.css('width', mapWidth + 'px');
-        element.css('height', mapHeight + 'px');
+        element.css('width', mapWidth + (/^[0-9]+$/.test(mapWidth)?'px':''));
+        element.css('height', mapHeight + (/^[0-9]+$/.test(mapHeight)?'px':''));
 
         scope.zoom = attrs.zoom || 12;
         if(attrs.lat && attrs.lng) {
@@ -309,14 +322,29 @@
         }
 
         if(attrs.onReposition) {
-          scope.map.on('dragend', function() {
-            scope[attrs.onReposition](scope.map.getBounds());
+          var repositionFn = $parse(attrs.onReposition, null, true);
+          scope.map.on('dragend', function(event) {
+            scope.$apply(function() {
+              repositionFn(scope, {$event:event});
+            });
           });
         }
 
         if(attrs.onZoom) {
-          scope.map.on('zoomend', function() {
-            scope[attrs.onZoom](scope.map.getBounds());
+          var zoomFn = $parse(attrs.onZoom, null, true);
+          scope.map.on('zoomend', function(event) {
+            scope.$apply(function() {
+              zoomFn(scope, {$event:event});
+            });
+          });
+        }
+
+        if(attrs.onClick) {
+          var clickFn = $parse(attrs.onClick, null, true);
+          scope.map.on('click', function(event) {
+            scope.$apply(function() {
+              clickFn(scope, {$event:event});
+            });
           });
         }
 
@@ -357,7 +385,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('marker', function($compile, $timeout, mapboxService) {
+  angular.module('angular-mapbox').directive('marker', function($compile, $timeout, $parse, mapboxService) {
     var _colors = {
       navy: '#001f3f',
       blue: '#0074d9',
@@ -413,6 +441,15 @@
             map.locate();
           } else {
             _marker = addMarker(scope, map, [attrs.lat, attrs.lng], popupContentElement, _opts, _style);
+
+            if(attrs.onClick) {
+              var clickFn = $parse(attrs.onClick, null, true);
+              _marker.on('click', function() {
+                scope.$apply(function() {
+                  clickFn(scope, {$event:event});
+                });
+              });
+            }
           }
         });
 

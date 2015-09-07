@@ -142,6 +142,19 @@
           scaleToFit: attrs.scaleToFit !== undefined
         };
         mapboxService.addMapInstance(scope.map, mapOptions);
+        
+        if (attrs.dragging === "false") {
+          scope.map.dragging.disable();
+        }
+        if (attrs.touchZoom === "false") {
+          scope.map.touchZoom.disable();
+        }
+        if (attrs.doubleClickZoom === "false") {
+          scope.map.doubleClickZoom.disable();
+        }
+        if (attrs.scrollWheelZoom === "false") {
+          scope.map.scrollWheelZoom.disable();
+        }
 
         var mapWidth = attrs.width || 500;
         var mapHeight = attrs.height || 500;

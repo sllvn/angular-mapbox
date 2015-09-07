@@ -1,6 +1,6 @@
 {
   "name": "angular-mapbox",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/angular-mapbox.js",
   "description": "Angular directives for easy Mapbox maps",
   "scripts": {

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('angular-mapbox').directive('mapbox', function($compile, $q, mapboxService) {
+  angular.module('angular-mapbox').directive('mapbox', function($compile, $q, $parse, mapboxService) {
     var _mapboxMap;
 
     return {
@@ -30,14 +30,29 @@
         }
 
         if(attrs.onReposition) {
-          scope.map.on('dragend', function() {
-            scope[attrs.onReposition](scope.map.getBounds());
+          var repositionFn = $parse(attrs.onReposition, null, true);
+          scope.map.on('dragend', function(event) {
+            scope.$apply(function() {
+              repositionFn(scope, {$event:event});
+            });
           });
         }
 
         if(attrs.onZoom) {
-          scope.map.on('zoomend', function() {
-            scope[attrs.onZoom](scope.map.getBounds());
+          var zoomFn = $parse(attrs.onZoom, null, true);
+          scope.map.on('zoomend', function(event) {
+            scope.$apply(function() {
+              zoomFn(scope, {$event:event});
+            });
+          });
+        }
+
+        if(attrs.onClick) {
+          var clickFn = $parse(attrs.onClick, null, true);
+          scope.map.on('click', function(event) {
+            scope.$apply(function() {
+              clickFn(scope, {$event:event});
+            });
           });
         }
 
